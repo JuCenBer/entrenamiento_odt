@@ -65,7 +65,7 @@ public class AutomovilistaService {
 		String licensePlate = vehiculoDTO.getLicensePlate();
 		//Primero chequea que sea horario habil y que el vehiculo le pertenece al automovilista
 		if(automovilista.getCity().isBusinessHour(LocalDateTime.now().getHour()) && this.hasVehicle(automovilista, licensePlate)) {
-				parkingService.park(automovilista, licensePlate);	
+				parkingService.park(automovilista, licensePlate);
 		}
 		else {
 			throw new Exception("No es horario habil.");			
@@ -77,6 +77,7 @@ public class AutomovilistaService {
 		//Chequea si el vehiculo está estacionado. Si lo está, termina el estacionamiento.
 		if (automovilista.getParking() != null) { 
 				parkingService.unpark(automovilista, vehiculoDTO.getLicensePlate());
+				
 		}
 		else throw new Exception("El automovilista no existe o no se encuentra estacionado");
 	}

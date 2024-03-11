@@ -49,14 +49,15 @@ public class ParkingService {
 		} 
 	}
 	
-	public void unpark(Automovilista automovilista, String licensePlate) throws Exception{
+	public double unpark(Automovilista automovilista, String licensePlate) throws Exception{
 		if(this.isParked(licensePlate)) {
 			//Si el automovilista existe y esta estacionado, finaliza el estacionamiento
 			Parking parking = automovilista.getParking();
-			automovilista.end();
-			System.out.println("Estacionamiento terminado");
+			double monto = automovilista.end();
+			System.out.println("Estacionamiento terminado. El valor del mismo es: "+ monto);
 			parkingRepository.delete(parking);
 			automovilistaRepository.save(automovilista);
+			return monto;
 		}
 		else throw new Exception("El vehiculo no se encuentra estacionado.");
 	}

@@ -57,11 +57,10 @@ public class Automovilista {
 		this.parking = new Parking(this, plate);
 	}
 	
-	public boolean end() {
+	public double end() {
 		double monto = this.parking.endParking();
-		System.out.println(monto);
 		this.parking = null;
-		return true;
+		return monto;
 	}
 	
 	public String getCellphone() {
