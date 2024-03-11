@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cespi.induccion.estacionamiento.DTO.LoginDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
 import cespi.induccion.estacionamiento.models.Automovilista;
 import cespi.induccion.estacionamiento.models.Parking;
@@ -21,8 +22,22 @@ public class AutomovilistaService {
 	private AutomovilistaRepository automovilistaRepository;
 	@Autowired 
 	private ParkingService parkingService;
-	@Autowired 
-	private ParkingRepository parkingRepository;
+	
+	public void login(LoginDTO loginDTO) throws Exception{
+		try {			
+			Automovilista automovilista = this.findByCellphone(loginDTO.getCellphone());
+			if(!automovilista.getPassword().equals(loginDTO.getPassword())) throw new Exception("Credenciales invalidas.");
+		} catch (Exception e) {
+			throw new Exception("Credenciales invalidas.");
+		}
+		
+		
+	}
+	
+	public Automovilista create (Automovilista automovilista) throws Exception {
+		automovilistaRepository.save(automovilista);
+		return automovilista;
+	}
 	
 	public List<Automovilista> findAllAutomovilistas(){
 		return this.automovilistaRepository.findAll();
@@ -39,7 +54,7 @@ public class AutomovilistaService {
 	
 	public Automovilista findByCellphone(String cellphone) throws Exception{
 		try {
-			return this.automovilistaRepository.findByCellphone(cellphone);
+			return this.automovilistaRepository.findByCellphone(cellphone).get();
 		} catch (Exception e) {
 			throw new Exception("El automovilista no existe");
 		}
@@ -48,23 +63,9 @@ public class AutomovilistaService {
 	public void startParking(VehiculoDTO vehiculoDTO) throws Exception{
 		Automovilista automovilista = this.findById(vehiculoDTO.getId());
 		String licensePlate = vehiculoDTO.getLicensePlate();
-		//Primero chequea que sea horario habil
-		if(automovilista.getCity().isBusinessHour(LocalDateTime.now().getHour())) {
-			//Chequea si el vehiculo está estacionado. Si lo está, no lo estaciona
-			if (!parkingService.isParked(licensePlate) && automovilista.getVehiculos().contains(licensePlate)) {
-				if (automovilista != null && automovilista.getParking() == null) {
-					System.out.println(automovilista.getParking() == null);
-					automovilista.start(licensePlate);
-					System.out.println("Estacionamiento iniciado");
-					parkingRepository.save(automovilista.getParking());
-					automovilistaRepository.save(automovilista);
-				}
-				else {					
-					throw new Exception("El automovilista no existe o se encuentra estacionado.");
-				}
-			}else {
-				throw new Exception("El vehiculo ya se encuentra estacionado o no pertenece al automovilista.");				
-			} 	
+		//Primero chequea que sea horario habil y que el vehiculo le pertenece al automovilista
+		if(automovilista.getCity().isBusinessHour(LocalDateTime.now().getHour()) && this.hasVehicle(automovilista, licensePlate)) {
+				parkingService.park(automovilista, licensePlate);	
 		}
 		else {
 			throw new Exception("No es horario habil.");			
@@ -74,17 +75,10 @@ public class AutomovilistaService {
 	public void endParking(VehiculoDTO vehiculoDTO) throws Exception{
 		Automovilista automovilista = this.findById(vehiculoDTO.getId());
 		//Chequea si el vehiculo está estacionado. Si lo está, termina el estacionamiento.
-		if(parkingService.isParked(vehiculoDTO.getLicensePlate())) { 
-			//Si el automovilista existe y esta estacionado, finaliza el estacionamiento
-			if (automovilista.getParking() != null) {
-				Parking parking = automovilista.getParking();
-				automovilista.end();
-				parkingRepository.delete(parking);
-				automovilistaRepository.save(automovilista);
-			}
-			else throw new Exception("El automovilista no existe o no se encuentra estacionado");
+		if (automovilista.getParking() != null) { 
+				parkingService.unpark(automovilista, vehiculoDTO.getLicensePlate());
 		}
-		else throw new Exception("El vehiculo no se encuentra estacionado.");
+		else throw new Exception("El automovilista no existe o no se encuentra estacionado");
 	}
 	
 	public Automovilista addVehicle(long id, String licensePlate) throws Exception{
@@ -96,6 +90,15 @@ public class AutomovilistaService {
 		}
 		else {
 			throw new Exception("El automovilista ya tiene ese vehiculo");
+		}
+	}
+	
+	private boolean hasVehicle(Automovilista automovilista, String licensePlate) throws Exception{
+		if (automovilista.getVehiculos().contains(licensePlate)) {
+			return true;
+		}
+		else {
+			throw new Exception ("Ese vehiculo no pertenece al automovilista");
 		}
 	}
 }
