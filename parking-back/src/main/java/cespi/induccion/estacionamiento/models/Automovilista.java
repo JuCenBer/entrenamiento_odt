@@ -102,4 +102,16 @@ public class Automovilista {
 	public void setParking(Parking parking) {
 		this.parking = parking;
 	}
+
+	public BankAccount getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(BankAccount bankAccount) {
+		this.bankAccount = bankAccount;
+	}
+
+	public void addTransaction(Transaction consumo) {
+		this.transactions.add(consumo);
+	}
 }

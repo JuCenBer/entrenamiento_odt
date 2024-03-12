@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,14 +55,18 @@ public class AutomovilistaRestController {
 	}
 	
 	@PostMapping(value="/start_parking")
-	public ResponseEntity<?> startParking(@RequestBody VehiculoDTO vehiculoDTO){
+	public ResponseEntity<?> startParking(@RequestHeader("JWT") String token, @RequestBody VehiculoDTO vehiculoDTO){
+		if(automovilistaService.getUser(token) == null) {
+			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+		}
 		//El id pertenece al automovilista que quiere iniciar el estacionamiento, y la patente es del vehiculo que se quiere estacionar		
 		try {
 			automovilistaService.startParking(vehiculoDTO);
 			return new ResponseEntity<Void>(HttpStatus.OK);			
 		} catch (Exception e) {
-			ErrorMessage error = new ErrorMessage(404, e.getMessage());
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NO_CONTENT);
+			ErrorMessage error = new ErrorMessage(400, e.getMessage());
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -72,8 +77,9 @@ public class AutomovilistaRestController {
 			automovilistaService.endParking(vehiculoDTO);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} catch (Exception e) {
-			ErrorMessage error = new ErrorMessage(404, e.getMessage());
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NO_CONTENT);
+			ErrorMessage error = new ErrorMessage(400, e.getMessage().toString());
+			System.out.println(e.getMessage());
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
 	}
 	

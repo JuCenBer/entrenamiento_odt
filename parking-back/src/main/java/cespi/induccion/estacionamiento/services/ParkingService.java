@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cespi.induccion.estacionamiento.models.Automovilista;
+import cespi.induccion.estacionamiento.models.ConsumptionTransaction;
 import cespi.induccion.estacionamiento.models.Parking;
+import cespi.induccion.estacionamiento.models.Transaction;
 import cespi.induccion.estacionamiento.repositories.AutomovilistaRepository;
 import cespi.induccion.estacionamiento.repositories.ParkingRepository;
 
@@ -33,13 +35,11 @@ public class ParkingService {
 	public void park(Automovilista automovilista, String licensePlate) throws Exception{
 		//Chequea si el vehiculo está estacionado y si el vehiculo le pertenece al automovilista. Si lo está, no lo estaciona
 		if (!this.isParked(licensePlate)) {
-			if (automovilista != null && automovilista.getParking() == null) {
-				//Si el automovilista existe y está estacionado, lo estaciona
-				System.out.println(automovilista.getParking() == null);
+			if (automovilista.getParking() == null) {
+				//Si el automovilista existe y no está estacionado, lo estaciona
 				automovilista.start(licensePlate);
-				System.out.println("Estacionamiento iniciado");
 				parkingRepository.save(automovilista.getParking());
-				automovilistaRepository.save(automovilista);
+				System.out.println("Estacionamiento iniciado");
 			}
 			else {					
 				throw new Exception("El automovilista no existe o se encuentra estacionado.");
@@ -54,9 +54,8 @@ public class ParkingService {
 			//Si el automovilista existe y esta estacionado, finaliza el estacionamiento
 			Parking parking = automovilista.getParking();
 			double monto = automovilista.end();
-			System.out.println("Estacionamiento terminado. El valor del mismo es: "+ monto);
 			parkingRepository.delete(parking);
-			automovilistaRepository.save(automovilista);
+			System.out.println("parking eliminado");
 			return monto;
 		}
 		else throw new Exception("El vehiculo no se encuentra estacionado.");

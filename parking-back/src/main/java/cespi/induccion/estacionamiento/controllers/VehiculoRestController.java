@@ -24,5 +24,4 @@ public class VehiculoRestController {
 		return new ResponseEntity<Boolean>(checked, HttpStatus.OK);
 	}
 	
-	
 }
