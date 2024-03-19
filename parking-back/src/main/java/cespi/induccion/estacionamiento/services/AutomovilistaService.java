@@ -113,6 +113,10 @@ public class AutomovilistaService {
 		}
 	}
 	
+	public List<String> getVehicles(Automovilista automovilista) throws Exception{
+		return automovilista.getVehiculos();
+	}
+	
 	private boolean hasEnoughCredit(Automovilista automovilista) {
 		if (automovilista.getBankAccount().getBalance() >= automovilista.getCity().getPrice()) {
 			return true;

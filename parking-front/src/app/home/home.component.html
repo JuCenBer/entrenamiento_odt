@@ -1,1 +1,16 @@
-<p>home works!</p>
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Estacionamiento</h4>
+        <br>
+        <form class="row gy-2 gx-3 align-items-center">
+            <div class="row">
+                <label for="autoSizingSelect"><h5>Vehiculos</h5></label>
+                <select class="form-select" id="autoSizingSelect">
+                    <option selected>Seleccione un vehiculo</option>
+                    <option *ngFor="let vehiculo of vehiculos" value="{{vehiculo}}"> {{vehiculo}}</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Iniciar estacionamiento</button>            
+        </form>
+    </div>
+</div>

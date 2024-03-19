@@ -5,7 +5,7 @@ import { LoginData } from '../models/login-data';
 import { Router } from '@angular/router';
 import { ErrorMessage } from '../models/error-message';
 import { MatFormFieldModule, MatFormField} from '@angular/material/form-field';
-
+import { AppComponent } from '../app.component';
 
 @Component({
   standalone: true,

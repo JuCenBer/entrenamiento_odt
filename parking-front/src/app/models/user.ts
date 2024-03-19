@@ -1,8 +1,11 @@
 export class User {
-    
-    constructor(private cellphone: string,
-        private city: string, 
-        private vehiculos: string[]){
+    cellphone: string;
+    city: string;
+    vehiculos: string[];
 
+    constructor(cellphone: string, city: string, vehiculos: string[]){
+        this.cellphone = cellphone;
+        this.city = city;
+        this.vehiculos = vehiculos;
     }
 }

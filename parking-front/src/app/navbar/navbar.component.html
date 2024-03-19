@@ -1,0 +1,19 @@
+<div *ngIf="isLogged()">
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/home" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Transacciones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Vehiculos</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Perfil</a>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link active" (click)="logout()">Cerrar sesion</button>
+        </li>
+    </ul>
+</div>

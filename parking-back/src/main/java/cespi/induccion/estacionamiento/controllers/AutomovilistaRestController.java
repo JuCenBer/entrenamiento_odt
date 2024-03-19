@@ -54,6 +54,20 @@ public class AutomovilistaRestController {
 	 	return new ResponseEntity<Automovilista>(automovilista, HttpStatus.OK);
 	}
 	
+	@GetMapping(value="vehicles")
+	public ResponseEntity<?> getUserVehicles(@RequestHeader("JWT") String token){
+		List<String> vehiculos = null;
+		Automovilista automovilista = null;
+		try {
+			automovilista = automovilistaService.findByCellphone(token);
+			vehiculos = automovilistaService.getVehicles(automovilista);
+		} catch (Exception e) {
+			ErrorMessage error = new ErrorMessage(404, "El usuario no existe");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<List<String>>(vehiculos, HttpStatus.OK);
+	}
+	
 	@PostMapping(value="/start_parking")
 	public ResponseEntity<?> startParking(@RequestHeader("JWT") String token, @RequestBody VehiculoDTO vehiculoDTO){
 		if(automovilistaService.getUser(token) == null) {

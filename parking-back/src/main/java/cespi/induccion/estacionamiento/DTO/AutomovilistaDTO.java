@@ -25,7 +25,6 @@ public class AutomovilistaDTO {
 	public void getDTO(Automovilista automovilista) {
 		this.cellphone = automovilista.getCellphone();
 		this.vehiculos = automovilista.getVehiculos(); //en vez de pasarle la referencia, deberia clonar la lista
-		
 	}
 	
 	public long getId() {
