@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cespi.induccion.estacionamiento.DTO.ErrorMessage;
+import cespi.induccion.estacionamiento.DTO.ParkingDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
 import cespi.induccion.estacionamiento.models.Automovilista;
 import cespi.induccion.estacionamiento.services.AutomovilistaService;
@@ -54,8 +55,8 @@ public class AutomovilistaRestController {
 	 	return new ResponseEntity<Automovilista>(automovilista, HttpStatus.OK);
 	}
 	
-	@GetMapping(value="vehicles")
-	public ResponseEntity<?> getUserVehicles(@RequestHeader("JWT") String token){
+	@GetMapping(value="/vehicles")
+	public ResponseEntity<?> getUserVehicles(@RequestHeader("jwt") String token){
 		List<String> vehiculos = null;
 		Automovilista automovilista = null;
 		try {
@@ -70,13 +71,20 @@ public class AutomovilistaRestController {
 	
 	@PostMapping(value="/start_parking")
 	public ResponseEntity<?> startParking(@RequestHeader("JWT") String token, @RequestBody VehiculoDTO vehiculoDTO){
+		Automovilista automovilista = null;
 		if(automovilistaService.getUser(token) == null) {
 			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
 		}
+		try {
+			automovilista = automovilistaService.findByCellphone(token);
+			System.out.println("automovilista encontrado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		//El id pertenece al automovilista que quiere iniciar el estacionamiento, y la patente es del vehiculo que se quiere estacionar		
 		try {
-			automovilistaService.startParking(vehiculoDTO);
+			automovilistaService.startParking(automovilista, vehiculoDTO.getLicensePlate());
 			return new ResponseEntity<Void>(HttpStatus.OK);			
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(400, e.getMessage());
@@ -85,10 +93,21 @@ public class AutomovilistaRestController {
 	}
 	
 	@PostMapping(value="/end_parking")
-	public ResponseEntity<?> endParking(@RequestBody VehiculoDTO vehiculoDTO){
+	public ResponseEntity<?> endParking(@RequestHeader("JWT") String token){
 		//El id pertenece al automovilista que quiere finalizar el estacionamiento, y la patente es del vehiculo cuyo estacionamiento se quiere terminar.
+		Automovilista automovilista = null;
+		if(automovilistaService.getUser(token) == null) {
+			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+		}
 		try {
-			automovilistaService.endParking(vehiculoDTO);
+			automovilista = automovilistaService.findByCellphone(token);
+			System.out.println("automovilista encontrado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			automovilistaService.endParking(automovilista);
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(400, e.getMessage().toString());
@@ -112,5 +131,18 @@ public class AutomovilistaRestController {
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Automovilista>(automovilista, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/parking_status")
+	public ResponseEntity<?> is_parked(@RequestHeader("JWT") String token){
+		Automovilista automovilista = null;
+		try {
+			automovilista = automovilistaService.findByCellphone(token);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		ParkingDTO parkingDTO = this.automovilistaService.isParked(automovilista);
+		return new ResponseEntity<ParkingDTO>(parkingDTO, HttpStatus.OK);
+		
 	}
 }

@@ -4,7 +4,6 @@ import { AuthService } from '../services/auth-service/auth-service.service';
 import { LoginData } from '../models/login-data';
 import { Router } from '@angular/router';
 import { ErrorMessage } from '../models/error-message';
-import { MatFormFieldModule, MatFormField} from '@angular/material/form-field';
 import { AppComponent } from '../app.component';
 
 @Component({
@@ -12,15 +11,12 @@ import { AppComponent } from '../app.component';
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css',
-  imports: [ ReactiveFormsModule,
-  MatFormField,
-  MatFormFieldModule]
-})
+  imports: [ ReactiveFormsModule]})
 
 export class LoginFormComponent {
 
   errorMsg: ErrorMessage = {
-    msg: "",
+    message: "",
     status: 0
   }
   constructor(private authService: AuthService, private router: Router){}
@@ -36,11 +32,10 @@ export class LoginFormComponent {
     if(this.loginForm.valid){
       this.authService.loginUser(new LoginData(cellphoneTrim, passwordTrim)).subscribe({
         error: (e) => {
-          this.errorMsg.msg = e.error.message
-          this.errorMsg.status = 401
+          this.errorMsg = e.error;
         },
         next: (data) =>{
-          localStorage.setItem("token", data.token);
+          localStorage.setItem("token", data["JWT"]);
           localStorage.setItem("username", cellphoneTrim);
           this.router.navigate(["home"]);
         }

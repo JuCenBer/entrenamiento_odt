@@ -57,7 +57,7 @@ public class AuthRestController {
 		}
 		try {
 			automovilistaService.login(loginDTO);
-			String token = "{\"token\": \""+ loginDTO.getCellphone()+"\"}";
+			String token = "{\"JWT\": \""+ loginDTO.getCellphone()+"\"}";
 			return new ResponseEntity<String>(token, HttpStatus.OK);
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");

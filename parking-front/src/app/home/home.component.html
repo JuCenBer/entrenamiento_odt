@@ -2,15 +2,16 @@
     <div class="card-body">
         <h4 class="card-title">Estacionamiento</h4>
         <br>
-        <form class="row gy-2 gx-3 align-items-center">
+        <form [formGroup]="parkingForm" (ngSubmit)="startParking()" class="row gy-2 gx-3 align-items-center">
             <div class="row">
-                <label for="autoSizingSelect"><h5>Vehiculos</h5></label>
-                <select class="form-select" id="autoSizingSelect">
-                    <option selected>Seleccione un vehiculo</option>
+                <label for="autoSizingSelect vehiculo"><h5>Vehiculos</h5></label>
+                <select class="form-select form-control" id="autoSizingSelect vehicle" formControlName="vehicle" [value]="parkingInfo.parkedCarLicensePlate">
                     <option *ngFor="let vehiculo of vehiculos" value="{{vehiculo}}"> {{vehiculo}}</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-success">Iniciar estacionamiento</button>            
+            <button *ngIf="!this.parkingInfo.parked" type="submit" class="btn btn-success">Iniciar estacionamiento</button>  
+            <button *ngIf="this.parkingInfo.parked" type="button" class="btn btn-danger" (click)="endParking()">Finalizar estacionamiento</button>  
         </form>
+        {{ errorMsg.message }}
     </div>
 </div>

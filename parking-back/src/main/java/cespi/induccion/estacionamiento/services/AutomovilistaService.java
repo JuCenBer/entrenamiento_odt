@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cespi.induccion.estacionamiento.DTO.LoginDTO;
+import cespi.induccion.estacionamiento.DTO.ParkingDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
 import cespi.induccion.estacionamiento.models.Automovilista;
 import cespi.induccion.estacionamiento.models.Parking;
@@ -67,21 +68,19 @@ public class AutomovilistaService {
 		}
 	}
 	
-	public void startParking(VehiculoDTO vehiculoDTO) throws Exception{
-		Automovilista automovilista = this.findById(vehiculoDTO.getId());
-		System.out.println("automovilista encontrado");
-		String licensePlate = vehiculoDTO.getLicensePlate();
+	public void startParking(Automovilista automovilista, String vehiculoDTO) throws Exception{
+		String licensePlate = vehiculoDTO;
+		System.out.println(licensePlate);
 		if(this.canPark(automovilista, licensePlate)) {
 			parkingService.park(automovilista, licensePlate);
 			automovilistaRepository.save(automovilista);
 		}
 	}
 
-	public void endParking(VehiculoDTO vehiculoDTO) throws Exception{
-		Automovilista automovilista = this.findById(vehiculoDTO.getId());
+	public void endParking(Automovilista automovilista) throws Exception{
 		//Chequea si el vehiculo está estacionado. Si lo está, termina el estacionamiento.
 		if (automovilista.getParking() != null) { 
-				double monto = parkingService.unpark(automovilista, vehiculoDTO.getLicensePlate());
+				double monto = parkingService.unpark(automovilista);
 				bankAccountService.substractBalance(automovilista, monto);
 				Transaction consumo = transactionService.createConsumption(monto, "Pago de estacionamiento.");
 				automovilista.addTransaction(consumo);
@@ -132,5 +131,13 @@ public class AutomovilistaService {
 		}else {
 			throw new Exception("El automovilista no tiene credito o ese vehiculo no le pertenece");
 		}
+	}
+	
+	public ParkingDTO isParked(Automovilista automovilista) {
+		if(automovilista.getParking() == null) {
+			return new ParkingDTO(false, "");
+			
+		}
+		else return new ParkingDTO(true, automovilista.getParking().getLicensePlate());
 	}
 }

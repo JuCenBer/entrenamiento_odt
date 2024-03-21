@@ -1,4 +1,4 @@
 export class ErrorMessage {
-    msg!: String;
+    message!: String;
     status!: number;
 }
