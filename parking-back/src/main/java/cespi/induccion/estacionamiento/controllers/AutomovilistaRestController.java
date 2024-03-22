@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cespi.induccion.estacionamiento.DTO.ErrorMessage;
 import cespi.induccion.estacionamiento.DTO.ParkingDTO;
+import cespi.induccion.estacionamiento.DTO.TransactionDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
 import cespi.induccion.estacionamiento.models.Automovilista;
 import cespi.induccion.estacionamiento.services.AutomovilistaService;
@@ -134,15 +135,31 @@ public class AutomovilistaRestController {
 	}
 	
 	@GetMapping(value="/parking_status")
-	public ResponseEntity<?> is_parked(@RequestHeader("JWT") String token){
+	public ResponseEntity<?> isParked(@RequestHeader("JWT") String token){
 		Automovilista automovilista = null;
 		try {
 			automovilista = automovilistaService.findByCellphone(token);
 		} catch (Exception e) {
-			// TODO: handle exception
+			ErrorMessage error = new ErrorMessage(400, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
 		ParkingDTO parkingDTO = this.automovilistaService.isParked(automovilista);
 		return new ResponseEntity<ParkingDTO>(parkingDTO, HttpStatus.OK);
 		
 	}
+	
+	@GetMapping(value="/transactions")
+	public ResponseEntity<?> getUserTransactions(@RequestHeader("JWT") String token){
+		List<TransactionDTO> transacciones = null;
+		Automovilista automovilista = null;
+		try {
+			automovilista = automovilistaService.findByCellphone(token);
+		} catch (Exception e) {
+			ErrorMessage error = new ErrorMessage(400, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
+		}
+		transacciones = automovilistaService.findTransactions(automovilista);
+		return new ResponseEntity<List<TransactionDTO>>(transacciones, HttpStatus.OK);
+	}
+	
 }

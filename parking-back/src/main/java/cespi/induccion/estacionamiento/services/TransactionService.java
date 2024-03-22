@@ -1,9 +1,13 @@
 package cespi.induccion.estacionamiento.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cespi.induccion.estacionamiento.DTO.TransactionDTO;
 import cespi.induccion.estacionamiento.models.ConsumptionTransaction;
 import cespi.induccion.estacionamiento.models.RechargeTransaction;
 import cespi.induccion.estacionamiento.models.Transaction;
@@ -31,5 +35,13 @@ public class TransactionService {
 		RechargeTransaction recharge = new RechargeTransaction();
 		this.saveTransaction(recharge);
 		return recharge;
+	}
+	
+	public List<TransactionDTO> getDTOs(List<Transaction> transacciones){
+		List<TransactionDTO> transaccionesDTO = new ArrayList<TransactionDTO>();
+		for(Transaction transaccion: transacciones) {
+			transaccionesDTO.add(transaccion.getDTO());
+		}
+		return transaccionesDTO;
 	}
 }

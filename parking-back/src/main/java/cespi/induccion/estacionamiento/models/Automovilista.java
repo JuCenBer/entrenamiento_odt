@@ -114,4 +114,12 @@ public class Automovilista {
 	public void addTransaction(Transaction consumo) {
 		this.transactions.add(consumo);
 	}
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
+	}
 }

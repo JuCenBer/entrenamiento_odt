@@ -2,6 +2,7 @@ package cespi.induccion.estacionamiento.models;
 
 import java.time.LocalDate;
 
+import cespi.induccion.estacionamiento.DTO.TransactionDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -10,7 +11,7 @@ import jakarta.persistence.InheritanceType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Transaction {
+public abstract class Transaction {
 
 	@Id @GeneratedValue
 	private Long id;
@@ -52,5 +53,5 @@ public class Transaction {
 		this.operation = operation;
 	}
 	
-	
+	public abstract TransactionDTO getDTO();
 }

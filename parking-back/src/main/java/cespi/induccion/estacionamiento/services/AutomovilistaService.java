@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cespi.induccion.estacionamiento.DTO.LoginDTO;
 import cespi.induccion.estacionamiento.DTO.ParkingDTO;
+import cespi.induccion.estacionamiento.DTO.TransactionDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
 import cespi.induccion.estacionamiento.models.Automovilista;
 import cespi.induccion.estacionamiento.models.Parking;
@@ -139,5 +140,12 @@ public class AutomovilistaService {
 			
 		}
 		else return new ParkingDTO(true, automovilista.getParking().getLicensePlate());
+	}
+	
+	public List<TransactionDTO> findTransactions(Automovilista automovilista){
+		List<Transaction> transacciones = automovilista.getTransactions();
+		List<TransactionDTO> transaccionesDTO = null;
+		transaccionesDTO = transactionService.getDTOs(transacciones);
+		return transaccionesDTO;
 	}
 }
