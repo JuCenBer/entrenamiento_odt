@@ -10,7 +10,7 @@ export class RechargeOnlyStrategy extends TransactionFilteringStrategy{
     }
 
     public override filter(): Transaction[] {
-        let transactionList!: Transaction[];
+        let transactionList: Transaction[] = [];
         this.getTransactionComponent().transacciones!.forEach((transaction) => {
             transactionList = RechargeOnlyStrategy.addRecharge(transaction, transactionList);
         })
@@ -18,7 +18,7 @@ export class RechargeOnlyStrategy extends TransactionFilteringStrategy{
     }
 
     public static addRecharge(transaction: RechargeTransaction, transactionList:Transaction[]): Transaction[]{
-        if(transaction.type == "consumption"){
+        if(transaction.type == "recharge"){
                 let consumptionTransaction = new RechargeTransaction(transaction.type,transaction.date, transaction.amount, transaction.operation)
                 transactionList.push(consumptionTransaction)
             }

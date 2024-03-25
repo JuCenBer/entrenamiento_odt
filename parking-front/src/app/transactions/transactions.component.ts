@@ -4,11 +4,15 @@ import { UserService } from '../services/user-service/user.service';
 import { ErrorMessage } from '../models/error-message';
 import { TransactionFilteringStrategy } from '../classes/transaction-filtering-strategy';
 import { AllTransactionsStrategy } from '../classes/all-transactions-strategy';
+import { NgFor, NgIf, DatePipe } from '@angular/common';
+import { ConsumptionOnlyStrategy } from '../classes/consumption-only-strategy';
+import { RechargeOnlyStrategy } from '../classes/recharge-only-strategy';
+
 
 @Component({
   selector: 'app-transactions',
   standalone: true,
-  imports: [],
+  imports: [NgFor, NgIf, DatePipe],
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css'
 })
@@ -26,9 +30,9 @@ export class TransactionsComponent {
 
   }
 
-  ngOnInit():void{
-    this.setTransactionFilteringStrategy(new AllTransactionsStrategy(this));
+  ngOnInit(){
     this.getTransactions();
+    this.setAllTransactionsStrategy();
   }
 
   getTransactions(): void{
@@ -38,12 +42,24 @@ export class TransactionsComponent {
       },
       next: (data) =>{
         this.transacciones = data;
-        this.filteredTransactions = this.filteringStrategy?.filter();
       }
     })
   }
 
   setTransactionFilteringStrategy(strategy: TransactionFilteringStrategy):void{
     this.filteringStrategy = strategy;
+    this.filteredTransactions = this.filteringStrategy.filter();
+  }
+
+  setAllTransactionsStrategy():void{
+    this.setTransactionFilteringStrategy(new AllTransactionsStrategy(this));
+  }
+
+  setConsumptionOnlyStrategy():void{
+    this.setTransactionFilteringStrategy(new ConsumptionOnlyStrategy(this));
+  }
+
+  setRechargeOnlyStrategy():void{
+    this.setTransactionFilteringStrategy(new RechargeOnlyStrategy(this));
   }
 }

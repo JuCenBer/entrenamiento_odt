@@ -13,7 +13,7 @@ export class ConsumptionTransaction implements Transaction{
         this.operation = operation;
     }
 
-    getAmountColor(): string {
-        return 'text-danger';
+    public getAmountColor(): string {
+        return '$red-600';
     }
 }

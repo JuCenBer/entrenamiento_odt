@@ -10,7 +10,7 @@ export class ConsumptionOnlyStrategy extends TransactionFilteringStrategy{
     }
 
     public override filter(): Transaction[] {
-        let transactionList!: Transaction[];
+        let transactionList: Transaction[] = [];
         this.getTransactionComponent().transacciones!.forEach((transaction) => {
             transactionList = ConsumptionOnlyStrategy.addConsumption(transaction, transactionList);
         })

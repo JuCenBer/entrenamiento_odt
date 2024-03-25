@@ -13,7 +13,7 @@ export class RechargeTransaction implements Transaction{
         this.operation = operation;
     }
 
-    getAmountColor(): string {
-        return 'text-success';
+    public getAmountColor(): string {
+        return '$green-600';
     }
 }

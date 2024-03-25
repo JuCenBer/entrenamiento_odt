@@ -12,8 +12,8 @@ export class AllTransactionsStrategy extends TransactionFilteringStrategy{
     }
     
     public override filter(): Transaction[] {
-        let allTransactions!: Transaction[];
-        this.getTransactionComponent().transacciones!.forEach((transaction) => {
+        let allTransactions: Transaction[] = [];
+        this.getTransactionComponent().transacciones?.forEach((transaction) => {
             allTransactions = ConsumptionOnlyStrategy.addConsumption(transaction, allTransactions);
             allTransactions = RechargeOnlyStrategy.addRecharge(transaction, allTransactions);
         })
