@@ -2,8 +2,10 @@ package cespi.induccion.estacionamiento.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,8 +84,8 @@ public class AutomovilistaService {
 		//Chequea si el vehiculo está estacionado. Si lo está, termina el estacionamiento.
 		if (automovilista.getParking() != null) { 
 				double monto = parkingService.unpark(automovilista);
-				bankAccountService.substractBalance(automovilista, monto);
-				Transaction consumo = transactionService.createConsumption(monto, "Pago de estacionamiento.");
+				double newBalance = bankAccountService.substractBalance(automovilista, monto);
+				Transaction consumo = transactionService.createConsumption(monto, newBalance, "Pago de estacionamiento.");
 				automovilista.addTransaction(consumo);
 				automovilistaRepository.save(automovilista);
 				System.out.println("Estacionamiento terminado. El valor del mismo es: "+ monto);
@@ -91,12 +93,11 @@ public class AutomovilistaService {
 		else throw new Exception("El automovilista no existe o no se encuentra estacionado");
 	}
 	
-	public Automovilista addVehicle(long id, String licensePlate) throws Exception{
-		Automovilista automovilista = this.findById(id);
+	public List<String> addVehicle(Automovilista automovilista, String licensePlate) throws Exception{
 		if (!automovilista.getVehiculos().contains(licensePlate)) {
 			automovilista.getVehiculos().add(licensePlate);
 			automovilistaRepository.save(automovilista);
-			return automovilista;
+			return this.getVehicles(automovilista);
 		}
 		else {
 			throw new Exception("El automovilista ya tiene ese vehiculo");
@@ -148,4 +149,19 @@ public class AutomovilistaService {
 		transaccionesDTO = transactionService.getDTOs(transacciones);
 		return transaccionesDTO;
 	}
+	
+	@Scheduled(cron = "0 0 20 * * MON-FRI")
+	public void endAllUsersParking() {
+		List<Automovilista> automovilistas = this.automovilistaRepository.findAll();
+		for (Automovilista automovilista: automovilistas) {
+			if(this.isParked(automovilista).isParked()) {				
+				try {
+					this.endParking(automovilista);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }

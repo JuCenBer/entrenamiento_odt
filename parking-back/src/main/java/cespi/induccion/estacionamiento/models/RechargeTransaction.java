@@ -11,12 +11,12 @@ public class RechargeTransaction extends Transaction{
 		super();
 	}
 	
-	public RechargeTransaction(double monto, String operation) {
-		super(monto, operation);
+	public RechargeTransaction(double monto, double newBalance, String operation) {
+		super(monto, newBalance, operation);
 	}
 	
 	public RechargeTransactionDTO getDTO() {
-		return new RechargeTransactionDTO(this.getDate(), this.getAmount(), this.getOperation());
+		return new RechargeTransactionDTO(this.getDate(), this.getAmount(), this.getNewBalance(), this.getOperation());
 	}
 
 }

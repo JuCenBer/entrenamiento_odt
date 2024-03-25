@@ -6,15 +6,17 @@ public class TransactionDTO {
 
 	private LocalDate date;
 	private double amount;
+	private double newBalance;
 	private String operation;
 	private String type;
 	
 	public TransactionDTO() {
 	}
 	
-	public TransactionDTO(LocalDate date, double amount, String operation, String type) {
+	public TransactionDTO(LocalDate date, double amount, double newBalance, String operation, String type) {
 		this.date = date;
 		this.amount = amount;
+		this.newBalance = newBalance;
 		this.operation = operation;
 		this.type = type;
 	}
@@ -49,6 +51,14 @@ public class TransactionDTO {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public double getNewBalance() {
+		return newBalance;
+	}
+
+	public void setNewBalance(double newBalance) {
+		this.newBalance = newBalance;
 	}
 	
 	

@@ -17,15 +17,17 @@ public abstract class Transaction {
 	private Long id;
 	private LocalDate date;
 	private double amount;
+	private double newBalance;
 	private String operation;
 	
 	public Transaction() {
 		
 	}
 	
-	public Transaction(double amount, String operation) {
+	public Transaction(double amount, double newBalance, String operation) {
 		this.date = LocalDate.now();
 		this.amount = amount;
+		this.newBalance = newBalance;
 		this.operation = operation;
 	}
 
@@ -54,4 +56,14 @@ public abstract class Transaction {
 	}
 	
 	public abstract TransactionDTO getDTO();
+
+	public double getNewBalance() {
+		return newBalance;
+	}
+
+	public void setNewBalance(double newBalance) {
+		this.newBalance = newBalance;
+	}
+	
+	
 }

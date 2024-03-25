@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 public class ConsumptionTransactionDTO extends TransactionDTO{
 	
-	public ConsumptionTransactionDTO(LocalDate date, double amount, String operation) {
-		super(date, amount, operation, "consumption");
+	public ConsumptionTransactionDTO(LocalDate date, double amount, double newBalance, String operation) {
+		super(date, amount, newBalance, operation, "consumption");
 	}
 	
 	public ConsumptionTransactionDTO() {

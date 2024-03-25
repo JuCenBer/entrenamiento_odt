@@ -1,5 +1,6 @@
 package cespi.induccion.estacionamiento.models;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -36,7 +37,6 @@ public class City {
 			return false;
 		}
 	}
-	
 	
 	//Getter and setters
 	public String getCity() {

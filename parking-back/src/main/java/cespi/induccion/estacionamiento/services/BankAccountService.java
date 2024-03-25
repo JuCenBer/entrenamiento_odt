@@ -15,10 +15,12 @@ public class BankAccountService {
 	@Autowired
 	private BankAccountRepository bankAccountRepository;
 	
-	public void substractBalance(Automovilista automovilista, double amount) {
+	public double substractBalance(Automovilista automovilista, double amount) {
 		BankAccount account = automovilista.getBankAccount();
 		double balance = account.getBalance();
-		account.setBalance(balance-amount);
+		double newBalance = balance-amount;
+		account.setBalance(newBalance);
 		bankAccountRepository.save(account);
+		return newBalance;
 	}
 }

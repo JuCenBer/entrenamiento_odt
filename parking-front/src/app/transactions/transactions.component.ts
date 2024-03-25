@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Transaction } from '../models/transaction';
 import { UserService } from '../services/user-service/user.service';
 import { ErrorMessage } from '../models/error-message';
@@ -16,7 +16,7 @@ import { RechargeOnlyStrategy } from '../classes/recharge-only-strategy';
   templateUrl: './transactions.component.html',
   styleUrl: './transactions.component.css'
 })
-export class TransactionsComponent {
+export class TransactionsComponent{
 
   transacciones?: Transaction[];
   filteredTransactions?: Transaction[];
@@ -29,10 +29,11 @@ export class TransactionsComponent {
   constructor(private userService: UserService){
 
   }
-
+  
   ngOnInit(){
     this.getTransactions();
-    this.setAllTransactionsStrategy();
+    this.filteringStrategy = new AllTransactionsStrategy(this)
+    this.filteredTransactions = this.filteringStrategy.filter()
   }
 
   getTransactions(): void{

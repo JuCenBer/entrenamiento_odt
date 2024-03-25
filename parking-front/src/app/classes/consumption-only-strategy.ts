@@ -19,7 +19,7 @@ export class ConsumptionOnlyStrategy extends TransactionFilteringStrategy{
 
     public static addConsumption(transaction: ConsumptionTransaction, transactionList:Transaction[]): Transaction[]{
         if(transaction.type == "consumption"){
-                let consumptionTransaction = new ConsumptionTransaction(transaction.type,transaction.date, transaction.amount, transaction.operation)
+                let consumptionTransaction = new ConsumptionTransaction(transaction.type,transaction.date, transaction.amount, transaction.newBalance, transaction.operation)
                 transactionList.push(consumptionTransaction)
             }
         return transactionList;

@@ -1,0 +1,23 @@
+<div class="m-2">
+    <div class="row gx-3">
+        <div>
+            <h4>Vehiculos</h4>
+        </div>
+        <div>
+            <form [formGroup]="vehicleForm" (ngSubmit)="addVehicle()" class="row g-3">
+                <div class="col-auto">
+                    <label for="licensePlate" class="visually-hidden">Password</label>
+                    <input class="form-control" id="licensePlate" formControlName="licensePlate" placeholder="Patente">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-success mb-3" [disabled]="!(vehicleForm.valid && vehicleForm.dirty && vehicleForm.value.licensePlate!.length>=6)">Agregar Vehiculo</button>
+                </div>
+                {{this.errorMsg.message}}
+            </form>
+        </div>
+    </div>
+    <hr>
+    <ul class="list-group list-group-flush">
+        <li *ngFor="let vehicle of this.vehicles" class="list-group-item">{{ vehicle }}</li>
+    </ul>
+</div>

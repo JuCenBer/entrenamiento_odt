@@ -25,8 +25,8 @@ public class TransactionService {
 		this.transactionRepository.save(transaction);
 	}
 
-	public Transaction createConsumption(double monto, String operacion) {
-		ConsumptionTransaction consumption = new ConsumptionTransaction(monto, operacion);
+	public Transaction createConsumption(double monto, double newBalance, String operacion) {
+		ConsumptionTransaction consumption = new ConsumptionTransaction(monto, newBalance, operacion);
 		this.saveTransaction(consumption);
 		return consumption;
 	}

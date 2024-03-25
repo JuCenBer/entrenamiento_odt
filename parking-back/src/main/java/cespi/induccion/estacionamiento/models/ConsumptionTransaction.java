@@ -10,11 +10,11 @@ public class ConsumptionTransaction extends Transaction{
 		super();
 	}
 
-	public ConsumptionTransaction(double monto, String operacion) {
-		super(monto, operacion);
+	public ConsumptionTransaction(double monto, double newBalance, String operacion) {
+		super(monto, newBalance, operacion);
 	}
 	
 	public ConsumptionTransactionDTO getDTO() {
-		return new ConsumptionTransactionDTO(this.getDate(), this.getAmount(), this.getOperation());
+		return new ConsumptionTransactionDTO(this.getDate(), this.getAmount(), this.getNewBalance(), this.getOperation());
 	}
 }

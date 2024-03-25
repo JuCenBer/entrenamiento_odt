@@ -117,12 +117,24 @@ public class AutomovilistaRestController {
 		}
 	}
 	
-	@PutMapping(value="/{id}/add_vehicle")
-	public ResponseEntity<?> addVehicle(@PathVariable("id") long id, @RequestBody VehiculoDTO vehiculoDTO){
+	@PutMapping(value="/add_vehicle")
+	public ResponseEntity<?> addVehicle(@RequestHeader("JWT") String token, @RequestBody VehiculoDTO vehiculoDTO){
+		System.out.println(vehiculoDTO.getLicensePlate());
 		Automovilista automovilista = null;
+		List<String> vehicles = null;
+		if(automovilistaService.getUser(token) == null) {
+			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+		}
+		try {
+			automovilista = automovilistaService.findByCellphone(token);
+			System.out.println("automovilista encontrado");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if (vehiculoService.checkLicensePlateFormatRegex(vehiculoDTO.getLicensePlate())) {
 			try {
-				automovilista = automovilistaService.addVehicle(id, vehiculoDTO.getLicensePlate());			
+				vehicles = automovilistaService.addVehicle(automovilista, vehiculoDTO.getLicensePlate());			
 			} catch (Exception e) {
 				ErrorMessage error = new ErrorMessage(400, "No se pudo agregar el vehiculo");
 				return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
@@ -131,7 +143,7 @@ public class AutomovilistaRestController {
 			ErrorMessage error = new ErrorMessage(400, "La patente del vehiculo no cumple con ninguno de los formatos estándar.");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<Automovilista>(automovilista, HttpStatus.OK);
+		return new ResponseEntity<List<String>>(vehicles, HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/parking_status")

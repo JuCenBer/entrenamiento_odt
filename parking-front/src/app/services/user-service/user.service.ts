@@ -34,6 +34,10 @@ export class UserService {
     return this.http.get<string[]>(enviromentUrl.apiUrl+"/users/vehicles");
   }
 
+  addVehicle(vehicleData: any): Observable<any>{
+    return this.http.put<string[]>(enviromentUrl.apiUrl+"/users/add_vehicle", vehicleData, httpOptions)
+  }
+
   getTransactions(): Observable<any>{
     return this.http.get<Transaction[]>(enviromentUrl.apiUrl+"/users/transactions");
   }

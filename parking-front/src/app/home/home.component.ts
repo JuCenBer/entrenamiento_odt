@@ -24,6 +24,8 @@ export class HomeComponent {
     message: "",
     status:0
   };
+
+  cellphone: string = localStorage.getItem("username")!;
   
   constructor(private userService: UserService){
   }
@@ -37,7 +39,6 @@ export class HomeComponent {
   public parkingForm = new FormGroup({
     vehicle: new FormControl('', [Validators.required,Validators.nullValidator]),
   });
-
 
   getVehiculos():void{
     this.userService.getVehiculos().subscribe({
@@ -89,8 +90,10 @@ export class HomeComponent {
       next: (data)=>{
         this.parkingInfo.parked = false;
         this.parkingInfo.parkedCarLicensePlate = "";
-        
+        this.parkingForm.get("vehicle")?.setValue(null)
       }
     })
   }
+
+  
 }

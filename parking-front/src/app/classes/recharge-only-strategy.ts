@@ -19,7 +19,7 @@ export class RechargeOnlyStrategy extends TransactionFilteringStrategy{
 
     public static addRecharge(transaction: RechargeTransaction, transactionList:Transaction[]): Transaction[]{
         if(transaction.type == "recharge"){
-                let consumptionTransaction = new RechargeTransaction(transaction.type,transaction.date, transaction.amount, transaction.operation)
+                let consumptionTransaction = new RechargeTransaction(transaction.type,transaction.date, transaction.amount, transaction.newBalance, transaction.operation)
                 transactionList.push(consumptionTransaction)
             }
         return transactionList;
