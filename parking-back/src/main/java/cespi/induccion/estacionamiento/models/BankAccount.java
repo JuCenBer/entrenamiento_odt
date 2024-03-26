@@ -14,6 +14,7 @@ public class BankAccount {
 	private double balance;
 	
 	public BankAccount() {
+		
 	}
 
 	public BankAccount(double balance) {

@@ -14,6 +14,7 @@ public class City {
 	private int startHour;
 	private int endHour;
 	private double price;
+	private int minutesPerPeriod;
 	
 	public City() {
 		
@@ -25,6 +26,7 @@ public class City {
 		this.startHour = startHour;
 		this.endHour = endHour;
 		this.price = price;
+		this.minutesPerPeriod = 15;
 	}
 	
 	public boolean isBusinessHour(int hour) {
@@ -63,6 +65,13 @@ public class City {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
+	public int getMinutesPerPeriod() {
+		return minutesPerPeriod;
+	}
+
+	public void setMinutesPerPeriod(int minutesPerPeriod) {
+		this.minutesPerPeriod = minutesPerPeriod;
+	}
 	
 }

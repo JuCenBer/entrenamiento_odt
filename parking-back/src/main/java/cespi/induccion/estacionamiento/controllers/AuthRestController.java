@@ -39,8 +39,9 @@ public class AuthRestController {
 			System.out.println(e.getMessage());
 		}
 		try {
-			automovilistaService.create(automovilista);
-			return new ResponseEntity<AutomovilistaDTO>(HttpStatus.CREATED);
+			automovilistaService.register(automovilista);
+			String token = "{\"JWT\": \""+ automovilista.getCellphone()+"\"}";
+			return new ResponseEntity<String>(token, HttpStatus.CREATED);
 		}
 		catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(409, "Ha ocurrido un error, inténtelo nuevamente.");

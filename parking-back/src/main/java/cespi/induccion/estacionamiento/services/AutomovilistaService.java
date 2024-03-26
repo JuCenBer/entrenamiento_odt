@@ -14,6 +14,8 @@ import cespi.induccion.estacionamiento.DTO.ParkingDTO;
 import cespi.induccion.estacionamiento.DTO.TransactionDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
 import cespi.induccion.estacionamiento.models.Automovilista;
+import cespi.induccion.estacionamiento.models.BankAccount;
+import cespi.induccion.estacionamiento.models.City;
 import cespi.induccion.estacionamiento.models.Parking;
 import cespi.induccion.estacionamiento.models.Transaction;
 import cespi.induccion.estacionamiento.repositories.AutomovilistaRepository;
@@ -31,6 +33,8 @@ public class AutomovilistaService {
 	private TransactionService transactionService;
 	@Autowired
 	private BankAccountService bankAccountService;
+	@Autowired
+	private CityService cityService;
 	
 	public void login(LoginDTO loginDTO) throws Exception{
 		try {			
@@ -39,6 +43,14 @@ public class AutomovilistaService {
 		} catch (Exception e) {
 			throw new Exception("Credenciales invalidas.");
 		}
+	}
+	
+	public Automovilista register(Automovilista automovilista) throws Exception {
+		BankAccount account = this.bankAccountService.create();
+		City city = this.cityService.getCity();
+		automovilista.setBankAccount(account);
+		automovilista.setCity(city);
+		return this.create(automovilista);
 	}
 	
 	public Automovilista create (Automovilista automovilista) throws Exception {

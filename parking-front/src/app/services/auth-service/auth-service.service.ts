@@ -5,6 +5,7 @@ import { LoginData } from '../../models/login-data';
 import { User } from '../../models/user';
 import { enviromentUrl } from '../../enviroment/enviroment.component';
 import { Router } from '@angular/router';
+import { RegisterData } from '../../models/register-data';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -17,5 +18,9 @@ export class AuthService {
   logoutUser(): void {
     localStorage.clear();
     this.router.navigate(['login']);
+  }
+
+  registerUser(registerData: RegisterData):Observable<any>{
+    return this.http.post<User>(enviromentUrl.apiUrl+'/auth/register', registerData);
   }
 }

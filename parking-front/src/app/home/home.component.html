@@ -5,11 +5,15 @@
         </div>
         <h5 class="m-3">Celular: {{ this.cellphone }}</h5>
         <form [formGroup]="parkingForm" (ngSubmit)="startParking()" class="row gy-2 gx-3 align-items-center m-1">
-            <div class="row">
+            <div *ngIf="!parkingInfo.parked" class="row">
                 <label for="autoSizingSelect vehiculo"><h5>Vehiculos</h5></label>
                 <select class="form-select form-control" id="autoSizingSelect vehicle" formControlName="vehicle" [value]="parkingInfo.parkedCarLicensePlate">
                     <option *ngFor="let vehiculo of vehiculos" value="{{vehiculo}}"> {{vehiculo}}</option>
                 </select>
+            </div>
+            <div *ngIf=parkingInfo.parked class="row">
+                <label for="autoSizingSelect vehiculo"><h5>Vehiculo estacionado</h5></label>
+                <input  type="text" [disabled]="true" placeholder={{parkingInfo.parkedCarLicensePlate}}>
             </div>
             <button *ngIf="!this.parkingInfo.parked" type="submit" class="btn btn-success" [disabled]="!(parkingForm.valid && parkingForm.dirty)">Iniciar estacionamiento</button>  
             <button *ngIf="this.parkingInfo.parked" type="button" class="btn btn-danger" (click)="endParking()">Finalizar estacionamiento</button>  

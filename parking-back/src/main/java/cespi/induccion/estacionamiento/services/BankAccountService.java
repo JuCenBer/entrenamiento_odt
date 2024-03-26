@@ -23,4 +23,10 @@ public class BankAccountService {
 		bankAccountRepository.save(account);
 		return newBalance;
 	}
+	
+	public BankAccount create() {
+		BankAccount account = new BankAccount();
+		this.bankAccountRepository.save(account);
+		return account;
+	}
 }

@@ -1,6 +1,7 @@
 package cespi.induccion.estacionamiento.models;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,8 +15,8 @@ public class Parking {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
-	private int startHour;
-	private int endHour;
+	private LocalDateTime startHour;
+	private LocalDateTime endHour;
 	private String licensePlate;
 	@OneToOne
 	private Automovilista automovilista;
@@ -27,13 +28,13 @@ public class Parking {
 	public Parking(Automovilista automovilista, String licensePlate) {
 		this.automovilista = automovilista;
 		this.licensePlate = licensePlate;
-		this.startHour = LocalDateTime.now().getHour();
+		this.startHour = LocalDateTime.now();
 	}
 	
-	public int getStartHour() {
+	public LocalDateTime getStartHour() {
 		return startHour;
 	}
-	public int getEndHour() {
+	public LocalDateTime getEndHour() {
 		return endHour;
 	}
 	
@@ -46,6 +47,10 @@ public class Parking {
 	}
 
 	public double endParking() {
-		return (LocalDateTime.now().getHour() - this.startHour) * this.automovilista.getCity().getPrice();
+        LocalDateTime endHour = LocalDateTime.now();
+        long minutosTranscurridos = ChronoUnit.MINUTES.between(this.startHour, endHour);
+        City city = automovilista.getCity();
+        double periods = Math.ceil(((minutosTranscurridos) / city.getMinutesPerPeriod()) + 1); // Se le suma 1 para que cobre la primera fracccion correspondiente.
+		return periods * city.getPrice();
 	}
 }

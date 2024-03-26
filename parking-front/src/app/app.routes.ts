@@ -4,10 +4,12 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { HomeComponent } from './home/home.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
+import { RegisterFormComponent } from './register-form/register-form.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full'},
     { path: 'login', component: LoginFormComponent},
+    { path: 'register', component: RegisterFormComponent},
     { path: 'home', component: HomeComponent},
     { path: 'transactions', component: TransactionsComponent},
     { path: 'vehicles', component: VehiclesComponent},

@@ -1,7 +1,7 @@
 <div class="card w-75 text-center justify-content-center">
     <div class="card-body">
         <div class="card-header">
-            <h5>Login</h5>
+            <h5>Inicio de Sesion</h5>
         </div>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <br>
@@ -20,9 +20,12 @@
                 <br>
             </div>
             <div class="row mb-3">
-                <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Submit</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Iniciar Sesion</button>
             </div>
             {{ errorMsg.message }}
         </form>
+        <div>
+            <a href="#" routerLink="/register"><h6 href="#" routerLink="/register">¿No tienes una cuenta? Registrate</h6></a>
+        </div>
     </div>
 </div>
