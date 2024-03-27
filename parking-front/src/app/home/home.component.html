@@ -15,7 +15,30 @@
                 <label for="autoSizingSelect vehiculo"><h5>Vehiculo estacionado</h5></label>
                 <input  type="text" [disabled]="true" placeholder={{parkingInfo.parkedCarLicensePlate}}>
             </div>
-            <button *ngIf="!this.parkingInfo.parked" type="submit" class="btn btn-success" [disabled]="!(parkingForm.valid && parkingForm.dirty)">Iniciar estacionamiento</button>  
+            <!-- Button trigger modal -->
+            <button  *ngIf="!this.parkingInfo.parked" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal" [disabled]="!(parkingForm.valid && parkingForm.dirty)">
+                Iniciar estacionamiento
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                       <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">¿Estás seguro que querés iniciar el estacionamiento?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    <div class="modal-body">
+                        Si confirmás, se iniciará el estacionamiento y se empezará a cobrar por el tiempo que haya transcurrido
+                        hasta que se haya finalizado el mismo
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Iniciar estacionamiento</button>                     
+                    </div>
+                </div>
+            </div>
+            </div>
             <button *ngIf="this.parkingInfo.parked" type="button" class="btn btn-danger" (click)="endParking()">Finalizar estacionamiento</button>  
         </form>
         {{ errorMsg.message }}

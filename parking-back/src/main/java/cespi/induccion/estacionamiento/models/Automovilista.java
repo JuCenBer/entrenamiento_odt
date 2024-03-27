@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -40,6 +41,9 @@ public class Automovilista {
 	
 	@OneToOne
 	private Parking parking;
+	
+	@ManyToMany
+	private List<Role> roles;
 	
 	public Automovilista() {
 		
@@ -121,5 +125,17 @@ public class Automovilista {
 
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;
+	}
+
+	public void addRole(Role role) {
+		this.getRoles().add(role);
+	}
+	
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 }

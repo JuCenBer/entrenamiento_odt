@@ -51,6 +51,8 @@ public class Parking {
         long minutosTranscurridos = ChronoUnit.MINUTES.between(this.startHour, endHour);
         City city = automovilista.getCity();
         double periods = Math.ceil(((minutosTranscurridos) / city.getMinutesPerPeriod()) + 1); // Se le suma 1 para que cobre la primera fracccion correspondiente.
-		return periods * city.getPrice();
+		double amount = periods * city.getPrice();
+		int intAmount = (int)(amount*100.0);
+		return amount = ((double)intAmount)/100; //Esto es para asegurar que el precio sea solo de dos cifras.
 	}
 }

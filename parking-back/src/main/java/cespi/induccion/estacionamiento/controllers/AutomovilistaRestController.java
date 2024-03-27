@@ -81,7 +81,8 @@ public class AutomovilistaRestController {
 			automovilista = automovilistaService.findByCellphone(token);
 			System.out.println("automovilista encontrado");
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
 		}
 		//El id pertenece al automovilista que quiere iniciar el estacionamiento, y la patente es del vehiculo que se quiere estacionar		
 		try {

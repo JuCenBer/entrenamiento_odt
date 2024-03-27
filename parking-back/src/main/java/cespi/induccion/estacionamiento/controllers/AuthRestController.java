@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +16,8 @@ import cespi.induccion.estacionamiento.DTO.AutomovilistaDTO;
 import cespi.induccion.estacionamiento.DTO.ErrorMessage;
 import cespi.induccion.estacionamiento.DTO.LoginDTO;
 import cespi.induccion.estacionamiento.models.Automovilista;
+import cespi.induccion.estacionamiento.models.Permission;
+import cespi.induccion.estacionamiento.services.AuthorizationService;
 import cespi.induccion.estacionamiento.services.AutomovilistaService;
 
 @RestController
@@ -23,6 +27,8 @@ public class AuthRestController {
 	
 	@Autowired
 	private AutomovilistaService automovilistaService;
+	@Autowired
+	private AuthorizationService authorizationService;
 	
 	@PostMapping(value="/register")
 	public ResponseEntity<?> register(@RequestBody Automovilista automovilista){
@@ -64,6 +70,25 @@ public class AuthRestController {
 			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
 		}
+	}
+	
+	@PostMapping(value="/has_permission")
+	public ResponseEntity<?> hasPermission(@RequestHeader("JWT") String token, @RequestBody Permission permission){
+		boolean hasPermission = false;
+		Automovilista automovilista = null;
+		if(automovilistaService.getUser(token) == null) {
+			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+		}
+		try {
+			automovilista = automovilistaService.findByCellphone(token);
+			System.out.println("automovilista encontrado");
+		} catch (Exception e) {
+			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
+		}
+		hasPermission = authorizationService.hasPermission(automovilista, permission);
+		return new ResponseEntity<Boolean>(hasPermission, HttpStatus.OK);
 	}
 	
 //	public ResponseEntity<?> logout(@RequestBody LoginDTO loginDTO){
