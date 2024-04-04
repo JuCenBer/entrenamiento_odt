@@ -3,6 +3,7 @@ package cespi.induccion.estacionamiento.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import cespi.induccion.estacionamiento.DTO.AutomovilistaDTO;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,7 +44,7 @@ public class Automovilista {
 	private Parking parking;
 	
 	@ManyToMany
-	private List<Role> roles;
+	private List<Role> roles = new ArrayList<Role>();
 	
 	public Automovilista() {
 		
@@ -55,6 +56,7 @@ public class Automovilista {
 		this.bankAccount = bankAccount;
 		this.city = city;
 		this.vehiculos = new ArrayList<String>();
+		this.roles = new ArrayList<Role>();
 	}
 	
 	public void start(String plate) {
@@ -137,5 +139,25 @@ public class Automovilista {
 
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
+	}
+	
+	public List<String> getPermissions(){
+		List<String> permissionsDTO = new ArrayList<String>();
+		for (Role role: this.getRoles()) {
+			List<Permission> permissions = role.getPermissions();
+			System.out.println(role.getRole());
+			for(Permission permission: permissions) {
+				permissionsDTO.add(permission.getPermission());
+			}
+		}
+		return permissionsDTO;
+	}
+	
+	public AutomovilistaDTO getDTO() {
+		AutomovilistaDTO automovilistaDTO = new AutomovilistaDTO();
+		automovilistaDTO.setCellphone(cellphone);
+		automovilistaDTO.setPermissions(this.getPermissions());
+		automovilistaDTO.setVehiculos(this.getVehiculos());
+		return automovilistaDTO;
 	}
 }

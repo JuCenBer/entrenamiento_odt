@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cespi.induccion.estacionamiento.DTO.AutomovilistaDTO;
 import cespi.induccion.estacionamiento.DTO.LoginDTO;
 import cespi.induccion.estacionamiento.DTO.ParkingDTO;
 import cespi.induccion.estacionamiento.DTO.TransactionDTO;
@@ -17,9 +18,11 @@ import cespi.induccion.estacionamiento.models.Automovilista;
 import cespi.induccion.estacionamiento.models.BankAccount;
 import cespi.induccion.estacionamiento.models.City;
 import cespi.induccion.estacionamiento.models.Parking;
+import cespi.induccion.estacionamiento.models.Role;
 import cespi.induccion.estacionamiento.models.Transaction;
 import cespi.induccion.estacionamiento.repositories.AutomovilistaRepository;
 import cespi.induccion.estacionamiento.repositories.ParkingRepository;
+import cespi.induccion.estacionamiento.repositories.RoleRepository;
 
 @Service
 @Transactional
@@ -35,21 +38,27 @@ public class AutomovilistaService {
 	private BankAccountService bankAccountService;
 	@Autowired
 	private CityService cityService;
+	@Autowired
+	private RoleRepository roleRepository;
 	
-	public void login(LoginDTO loginDTO) throws Exception{
+	public AutomovilistaDTO login(LoginDTO loginDTO) throws Exception{
 		try {			
 			Automovilista automovilista = this.findByCellphone(loginDTO.getCellphone());
+			AutomovilistaDTO dto = automovilista.getDTO();
 			if(!automovilista.getPassword().equals(loginDTO.getPassword())) throw new Exception("Credenciales invalidas.");
+			else return dto;
 		} catch (Exception e) {
 			throw new Exception("Credenciales invalidas.");
 		}
 	}
 	
 	public Automovilista register(Automovilista automovilista) throws Exception {
+		Role automovilistaRole = roleRepository.findById((long)1).get();
 		BankAccount account = this.bankAccountService.create();
 		City city = this.cityService.getCity();
 		automovilista.setBankAccount(account);
 		automovilista.setCity(city);
+		automovilista.addRole(automovilistaRole);
 		return this.create(automovilista);
 	}
 	

@@ -12,19 +12,13 @@ public class AutomovilistaDTO {
 	
 	private long id;
 	private String cellphone;
-	private BankAccount bankAccount;
 	private City city;
-	private List<Transaction> transactions;
 	private List<String> vehiculos;
-	private Parking parking;
-	
+	private List<String> permissions;
+	private String token;
+
 	public AutomovilistaDTO() {
 		
-	}
-	
-	public void getDTO(Automovilista automovilista) {
-		this.cellphone = automovilista.getCellphone();
-		this.vehiculos = automovilista.getVehiculos(); //en vez de pasarle la referencia, deberia clonar la lista
 	}
 	
 	public long getId() {
@@ -39,36 +33,34 @@ public class AutomovilistaDTO {
 	public void setCellphone(String cellphone) {
 		this.cellphone = cellphone;
 	}
-	public BankAccount getBankAccount() {
-		return bankAccount;
-	}
-	public void setBankAccount(BankAccount bankAccount) {
-		this.bankAccount = bankAccount;
-	}
 	public City getCity() {
 		return city;
 	}
 	public void setCity(City city) {
 		this.city = city;
 	}
-	public List<Transaction> getTransactions() {
-		return transactions;
-	}
-	public void setTransactions(List<Transaction> transactions) {
-		this.transactions = transactions;
-	}
+	
 	public List<String> getVehiculos() {
 		return vehiculos;
 	}
 	public void setVehiculos(List<String> vehiculos) {
 		this.vehiculos = vehiculos;
 	}
-	public Parking getParking() {
-		return parking;
+
+	public List<String> getPermissions() {
+		return permissions;
 	}
-	public void setParking(Parking parking) {
-		this.parking = parking;
+
+	public void setPermissions(List<String> permissions) {
+		this.permissions = permissions;
 	}
-	
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 	
 }

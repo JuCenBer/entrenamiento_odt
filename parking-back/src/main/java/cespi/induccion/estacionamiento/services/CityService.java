@@ -1,6 +1,8 @@
 package cespi.induccion.estacionamiento.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,5 +25,14 @@ public class CityService {
 		City city = null;
 		city = this.cityRepository.findById((long) 1).get();
 		return city;
+	}
+	
+	@EventListener(ApplicationReadyEvent.class)
+	public void checkExistingRoles() {
+		if(cityRepository.findAll().size() != 1) {
+			cityRepository.deleteAll();
+			City city = new City("La Plata", 8, 20, 2.5);
+			cityRepository.save(city);
+		}
 	}
 }

@@ -31,7 +31,7 @@ public class AuthRestController {
 	private AuthorizationService authorizationService;
 	
 	@PostMapping(value="/register")
-	public ResponseEntity<?> register(@RequestBody Automovilista automovilista){
+	public ResponseEntity<?> register(@RequestBody Automovilista automovilista) {
 		if (automovilista.getCellphone().isBlank() || automovilista.getPassword().isBlank()) {
 			ErrorMessage error = new ErrorMessage(400, "Debe ingresar todos los campos.");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
@@ -44,7 +44,7 @@ public class AuthRestController {
 		catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		try {
+	try {
 			automovilistaService.register(automovilista);
 			String token = "{\"JWT\": \""+ automovilista.getCellphone()+"\"}";
 			return new ResponseEntity<String>(token, HttpStatus.CREATED);
@@ -63,9 +63,9 @@ public class AuthRestController {
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
 		try {
-			automovilistaService.login(loginDTO);
-			String token = "{\"JWT\": \""+ loginDTO.getCellphone()+"\"}";
-			return new ResponseEntity<String>(token, HttpStatus.OK);
+			AutomovilistaDTO dto = automovilistaService.login(loginDTO);
+			dto.setToken(loginDTO.getCellphone());
+			return new ResponseEntity<AutomovilistaDTO>(dto, HttpStatus.OK);
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
