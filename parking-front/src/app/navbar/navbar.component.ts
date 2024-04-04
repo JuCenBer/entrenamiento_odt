@@ -11,9 +11,15 @@ import { RouterLink } from '@angular/router';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+  
+  permissions: string[] = [];
 
   constructor(private auth: AuthService){
 
+  }
+
+  ngOnInit():void{
+    this.getPermissions();
   }
 
   isLogged(): boolean{
@@ -25,5 +31,9 @@ export class NavbarComponent {
 
   logout(){
     this.auth.logoutUser();
+  }
+
+  getPermissions():void{
+    this.permissions = JSON.parse(localStorage.getItem("permissions")!);
   }
 }

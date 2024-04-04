@@ -35,9 +35,15 @@ export class LoginFormComponent {
           this.errorMsg = e.error;
         },
         next: (data) =>{
-          localStorage.setItem("token", data["JWT"]);
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("permissions", JSON.stringify(data.permissions));
           localStorage.setItem("username", cellphoneTrim);
-          this.router.navigate(["home"]);
+          if (localStorage.getItem("permissions")?.includes("Park")){
+            this.router.navigate(["home"]);
+          }
+          else if(localStorage.getItem("permissions")?.includes("Sell")){
+            this.router.navigate(["sell"]);
+          }
         }
       })
     }
