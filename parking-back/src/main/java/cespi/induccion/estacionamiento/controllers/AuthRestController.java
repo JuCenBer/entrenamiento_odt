@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cespi.induccion.estacionamiento.DTO.AutomovilistaDTO;
+import cespi.induccion.estacionamiento.DTO.UserDTO;
 import cespi.induccion.estacionamiento.DTO.ErrorMessage;
 import cespi.induccion.estacionamiento.DTO.LoginDTO;
-import cespi.induccion.estacionamiento.models.Automovilista;
+import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.models.Permission;
 import cespi.induccion.estacionamiento.services.AuthorizationService;
 import cespi.induccion.estacionamiento.services.AutomovilistaService;
@@ -31,13 +31,13 @@ public class AuthRestController {
 	private AuthorizationService authorizationService;
 	
 	@PostMapping(value="/register")
-	public ResponseEntity<?> register(@RequestBody Automovilista automovilista) {
-		if (automovilista.getCellphone().isBlank() || automovilista.getPassword().isBlank()) {
+	public ResponseEntity<?> register(@RequestBody User user) {
+		if (user.getCellphone().isBlank() || user.getPassword().isBlank()) {
 			ErrorMessage error = new ErrorMessage(400, "Debe ingresar todos los campos.");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
 		try{
-			this.automovilistaService.findByCellphone(automovilista.getCellphone());			
+			this.automovilistaService.findByCellphone(user.getCellphone());			
 			ErrorMessage error = new ErrorMessage(409, "Ese numero de celular ya se encuentra registrado.");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.CONFLICT);				
 		}
@@ -45,9 +45,9 @@ public class AuthRestController {
 			System.out.println(e.getMessage());
 		}
 	try {
-			automovilistaService.register(automovilista);
-			String token = "{\"JWT\": \""+ automovilista.getCellphone()+"\"}";
-			return new ResponseEntity<String>(token, HttpStatus.CREATED);
+			UserDTO dto = automovilistaService.register(user);
+			dto.setToken(user.getCellphone());
+			return new ResponseEntity<UserDTO>(dto, HttpStatus.CREATED);
 		}
 		catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(409, "Ha ocurrido un error, inténtelo nuevamente.");
@@ -63,9 +63,9 @@ public class AuthRestController {
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
 		try {
-			AutomovilistaDTO dto = automovilistaService.login(loginDTO);
+			UserDTO dto = automovilistaService.login(loginDTO);
 			dto.setToken(loginDTO.getCellphone());
-			return new ResponseEntity<AutomovilistaDTO>(dto, HttpStatus.OK);
+			return new ResponseEntity<UserDTO>(dto, HttpStatus.OK);
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
@@ -75,19 +75,19 @@ public class AuthRestController {
 	@PostMapping(value="/has_permission")
 	public ResponseEntity<?> hasPermission(@RequestHeader("JWT") String token, @RequestBody Permission permission){
 		boolean hasPermission = false;
-		Automovilista automovilista = null;
+		User user = null;
 		if(automovilistaService.getUser(token) == null) {
 			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
 		}
 		try {
-			automovilista = automovilistaService.findByCellphone(token);
+			user = automovilistaService.findByCellphone(token);
 			System.out.println("automovilista encontrado");
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
 		}
-		hasPermission = authorizationService.hasPermission(automovilista, permission);
+		hasPermission = authorizationService.hasPermission(user, permission);
 		return new ResponseEntity<Boolean>(hasPermission, HttpStatus.OK);
 	}
 	

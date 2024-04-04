@@ -32,7 +32,7 @@ export class RegisterFormComponent {
   })
 
   onSubmit(){
-    let cellphoneTrim = this.registerForm.value.cellphone?.trim()
+    let cellphoneTrim = this.registerForm.value.cellphone!.trim()
     let password1 = this.registerForm.value.password
     let password2 = this.registerForm.value.repeatPassword
     if(password1 == password2){
@@ -42,9 +42,16 @@ export class RegisterFormComponent {
           this.errorMsg = e.error
         },
         next: (data) =>{
-          localStorage.setItem("token", data["JWT"]) 
-          localStorage.setItem("username", cellphoneTrim!);
-          this.router.navigate(["home"]);
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("permissions", JSON.stringify(data.permissions));
+          localStorage.setItem("username", cellphoneTrim);
+          this.authService.isLoggedIn.next(true);
+          if (localStorage.getItem("permissions")?.includes("Park")){
+            this.router.navigate(["home"]);
+          }
+          else if(localStorage.getItem("permissions")?.includes("Sell")){
+            this.router.navigate(["sell"]);
+          }
         }
       })
     }

@@ -19,14 +19,14 @@ public class Parking {
 	private LocalDateTime endHour;
 	private String licensePlate;
 	@OneToOne
-	private Automovilista automovilista;
+	private User user;
 	
 	public Parking() {
 		
 	}
 	
-	public Parking(Automovilista automovilista, String licensePlate) {
-		this.automovilista = automovilista;
+	public Parking(User user, String licensePlate) {
+		this.user = user;
 		this.licensePlate = licensePlate;
 		this.startHour = LocalDateTime.now();
 	}
@@ -49,7 +49,7 @@ public class Parking {
 	public double endParking() {
         LocalDateTime endHour = LocalDateTime.now();
         long minutosTranscurridos = ChronoUnit.MINUTES.between(this.startHour, endHour);
-        City city = automovilista.getCity();
+        City city = user.getCity();
         double periods = Math.ceil(((minutosTranscurridos) / city.getMinutesPerPeriod()) + 1); // Se le suma 1 para que cobre la primera fracccion correspondiente.
 		double amount = periods * city.getPrice();
 		int intAmount = (int)(amount*100.0);

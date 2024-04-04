@@ -1,1 +1,28 @@
-<p>sell works!</p>
+<div class="card">
+    <div class="card-body">
+        <div class="card-header">
+            <h4 class="card-title m-1">Carga de Saldo</h4>
+        </div>
+        <form [formGroup]="sellForm" (ngSubmit)="onSubmit()">
+            <br>
+            <div class="row mb-3">
+                <label for="cellphone" class="">Celular</label>
+                <div class="input-group">
+                    <div class="input-group-text">+54</div>
+                    <input type="text" class="form-control form-control-sm" id="cellphone" placeholder="9 221223456" formControlName="cellphone">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="password">Monto</label><br>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm" id="amount" formControlName="amount">
+                </div>
+                <br>
+            </div>
+            <div class="row mb-3">
+                <button type="submit" class="btn btn-success" [disabled]="!sellForm.valid">Cargar Saldo</button>
+            </div>
+            {{ errorMsg.message }}
+        </form>
+    </div>
+</div>

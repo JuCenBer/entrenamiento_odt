@@ -2,13 +2,13 @@ package cespi.induccion.estacionamiento.DTO;
 
 import java.util.List;
 
-import cespi.induccion.estacionamiento.models.Automovilista;
+import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.models.BankAccount;
 import cespi.induccion.estacionamiento.models.City;
 import cespi.induccion.estacionamiento.models.Parking;
 import cespi.induccion.estacionamiento.models.Transaction;
 
-public class AutomovilistaDTO {
+public class UserDTO {
 	
 	private long id;
 	private String cellphone;
@@ -17,7 +17,7 @@ public class AutomovilistaDTO {
 	private List<String> permissions;
 	private String token;
 
-	public AutomovilistaDTO() {
+	public UserDTO() {
 		
 	}
 	

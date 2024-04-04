@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cespi.induccion.estacionamiento.models.Automovilista;
+import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.models.BankAccount;
 import cespi.induccion.estacionamiento.repositories.BankAccountRepository;
 
@@ -15,8 +15,8 @@ public class BankAccountService {
 	@Autowired
 	private BankAccountRepository bankAccountRepository;
 	
-	public double substractBalance(Automovilista automovilista, double amount) {
-		BankAccount account = automovilista.getBankAccount();
+	public double substractBalance(User user, double amount) {
+		BankAccount account = user.getBankAccount();
 		double balance = account.getBalance();
 		double newBalance = balance-amount;
 		account.setBalance(newBalance);

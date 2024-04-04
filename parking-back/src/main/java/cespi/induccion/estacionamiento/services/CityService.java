@@ -28,7 +28,7 @@ public class CityService {
 	}
 	
 	@EventListener(ApplicationReadyEvent.class)
-	public void checkExistingRoles() {
+	public void checkExistingCity() {
 		if(cityRepository.findAll().size() != 1) {
 			cityRepository.deleteAll();
 			City city = new City("La Plata", 8, 20, 2.5);

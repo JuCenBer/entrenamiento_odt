@@ -9,18 +9,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cespi.induccion.estacionamiento.DTO.AutomovilistaDTO;
+import cespi.induccion.estacionamiento.DTO.UserDTO;
 import cespi.induccion.estacionamiento.DTO.LoginDTO;
 import cespi.induccion.estacionamiento.DTO.ParkingDTO;
 import cespi.induccion.estacionamiento.DTO.TransactionDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
-import cespi.induccion.estacionamiento.models.Automovilista;
+import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.models.BankAccount;
 import cespi.induccion.estacionamiento.models.City;
 import cespi.induccion.estacionamiento.models.Parking;
 import cespi.induccion.estacionamiento.models.Role;
 import cespi.induccion.estacionamiento.models.Transaction;
-import cespi.induccion.estacionamiento.repositories.AutomovilistaRepository;
+import cespi.induccion.estacionamiento.repositories.UserRepository;
 import cespi.induccion.estacionamiento.repositories.ParkingRepository;
 import cespi.induccion.estacionamiento.repositories.RoleRepository;
 
@@ -29,7 +29,7 @@ import cespi.induccion.estacionamiento.repositories.RoleRepository;
 public class AutomovilistaService {
 	
 	@Autowired
-	private AutomovilistaRepository automovilistaRepository;
+	private UserRepository userRepository;
 	@Autowired 
 	private ParkingService parkingService;
 	@Autowired
@@ -41,92 +41,95 @@ public class AutomovilistaService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
-	public AutomovilistaDTO login(LoginDTO loginDTO) throws Exception{
+	public UserDTO login(LoginDTO loginDTO) throws Exception{
 		try {			
-			Automovilista automovilista = this.findByCellphone(loginDTO.getCellphone());
-			AutomovilistaDTO dto = automovilista.getDTO();
-			if(!automovilista.getPassword().equals(loginDTO.getPassword())) throw new Exception("Credenciales invalidas.");
+			User user = this.findByCellphone(loginDTO.getCellphone());
+			UserDTO dto = user.getDTO();
+			if(!user.getPassword().equals(loginDTO.getPassword())) throw new Exception("Credenciales invalidas.");
 			else return dto;
 		} catch (Exception e) {
 			throw new Exception("Credenciales invalidas.");
 		}
 	}
 	
-	public Automovilista register(Automovilista automovilista) throws Exception {
+	public UserDTO register(User user) throws Exception {
+		UserDTO dto;
 		Role automovilistaRole = roleRepository.findById((long)1).get();
 		BankAccount account = this.bankAccountService.create();
 		City city = this.cityService.getCity();
-		automovilista.setBankAccount(account);
-		automovilista.setCity(city);
-		automovilista.addRole(automovilistaRole);
-		return this.create(automovilista);
+		user.setBankAccount(account);
+		user.setCity(city);
+		user.addRole(automovilistaRole);
+		user = this.create(user);
+		dto = user.getDTO();
+		return dto;
 	}
 	
-	public Automovilista create (Automovilista automovilista) throws Exception {
-		automovilistaRepository.save(automovilista);
-		return automovilista;
+	public User create (User user) throws Exception {
+		userRepository.save(user);
+		return user;
 	}
 	
-	public Automovilista getUser(String token) {
-		return this.automovilistaRepository.findByCellphone(token).get();
+	public User getUser(String token) {
+		return this.userRepository.findByCellphone(token).get();
 	}
 	
-	public List<Automovilista> findAllAutomovilistas(){
-		return this.automovilistaRepository.findAll();
+	public List<User> findAllAutomovilistas(){
+		return this.userRepository.findAll();
 	}
 	
-	public Automovilista findById(long id) throws Exception{
+	public User findById(long id) throws Exception{
 		try {			
-			return this.automovilistaRepository.findById(id).get();
+			return this.userRepository.findById(id).get();
 		}
 		catch (Exception e) {
 			throw new Exception("El automovilista no existe.");
 		}
 	}
 	
-	public Automovilista findByCellphone(String cellphone) throws Exception{
+	public User findByCellphone(String cellphone) throws Exception{
 		try {
-			return this.automovilistaRepository.findByCellphone(cellphone).get();
+			return this.userRepository.findByCellphone(cellphone).get();
 		} catch (Exception e) {
 			throw new Exception("El automovilista no existe");
 		}
 	}
 	
-	public void startParking(Automovilista automovilista, String vehiculoDTO) throws Exception{
+	public void startParking(User user, String vehiculoDTO) throws Exception{
 		String licensePlate = vehiculoDTO;
 		System.out.println(licensePlate);
-		if(this.canPark(automovilista, licensePlate)) {
-			parkingService.park(automovilista, licensePlate);
-			automovilistaRepository.save(automovilista);
+		if(this.canPark(user, licensePlate)) {
+			parkingService.park(user, licensePlate);
+			userRepository.save(user);
 		}
 	}
 
-	public void endParking(Automovilista automovilista) throws Exception{
+	public void endParking(User user) throws Exception{
 		//Chequea si el vehiculo está estacionado. Si lo está, termina el estacionamiento.
-		if (automovilista.getParking() != null) { 
-				double monto = parkingService.unpark(automovilista);
-				double newBalance = bankAccountService.substractBalance(automovilista, monto);
+		if (user.getParking() != null) { 
+				double monto = parkingService.unpark(user);
+				double newBalance = bankAccountService.substractBalance(user, monto);
 				Transaction consumo = transactionService.createConsumption(monto, newBalance, "Pago de estacionamiento.");
-				automovilista.addTransaction(consumo);
-				automovilistaRepository.save(automovilista);
+				user.addTransaction(consumo);
+				userRepository.save(user);
 				System.out.println("Estacionamiento terminado. El valor del mismo es: "+ monto);
 		}
 		else throw new Exception("El automovilista no existe o no se encuentra estacionado");
 	}
 	
-	public List<String> addVehicle(Automovilista automovilista, String licensePlate) throws Exception{
-		if (!automovilista.getVehiculos().contains(licensePlate)) {
-			automovilista.getVehiculos().add(licensePlate);
-			automovilistaRepository.save(automovilista);
-			return this.getVehicles(automovilista);
+	public List<String> addVehicle(User user, String licensePlate) throws Exception{
+		if (!user.getVehiculos().contains(licensePlate)) {
+			user.getVehiculos().add(licensePlate);
+			userRepository.save(user);
+			return this.getVehicles(user);
 		}
 		else {
 			throw new Exception("El automovilista ya tiene ese vehiculo");
 		}
 	}
 	
-	private boolean hasVehicle(Automovilista automovilista, String licensePlate) throws Exception{
-		if (automovilista.getVehiculos().contains(licensePlate)) {
+	private boolean hasVehicle(User user, String licensePlate) throws Exception{
+		if (user.getVehiculos().contains(licensePlate)) {
 			System.out.println("El vehiculo pertenece al automovilista");
 			return true;
 		}
@@ -135,37 +138,37 @@ public class AutomovilistaService {
 		}
 	}
 	
-	public List<String> getVehicles(Automovilista automovilista) throws Exception{
-		return automovilista.getVehiculos();
+	public List<String> getVehicles(User user) throws Exception{
+		return user.getVehiculos();
 	}
 	
-	private boolean hasEnoughCredit(Automovilista automovilista) {
-		if (automovilista.getBankAccount().getBalance() >= automovilista.getCity().getPrice()) {
+	private boolean hasEnoughCredit(User user) {
+		if (user.getBankAccount().getBalance() >= user.getCity().getPrice()) {
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean canPark(Automovilista automovilista, String licensePlate) throws Exception{
-		if(!automovilista.getCity().isBusinessHour(LocalDateTime.now().getHour())){
+	private boolean canPark(User user, String licensePlate) throws Exception{
+		if(!user.getCity().isBusinessHour(LocalDateTime.now().getHour())){
 			throw new Exception("No es horario habil");
-		}else if((this.hasEnoughCredit(automovilista)) && (this.hasVehicle(automovilista, licensePlate))){
+		}else if((this.hasEnoughCredit(user)) && (this.hasVehicle(user, licensePlate))){
 			return true;
 		}else {
 			throw new Exception("El automovilista no tiene credito o ese vehiculo no le pertenece");
 		}
 	}
 	
-	public ParkingDTO isParked(Automovilista automovilista) {
-		if(automovilista.getParking() == null) {
+	public ParkingDTO isParked(User user) {
+		if(user.getParking() == null) {
 			return new ParkingDTO(false, "");
 			
 		}
-		else return new ParkingDTO(true, automovilista.getParking().getLicensePlate());
+		else return new ParkingDTO(true, user.getParking().getLicensePlate());
 	}
 	
-	public List<TransactionDTO> findTransactions(Automovilista automovilista){
-		List<Transaction> transacciones = automovilista.getTransactions();
+	public List<TransactionDTO> findTransactions(User user){
+		List<Transaction> transacciones = user.getTransactions();
 		List<TransactionDTO> transaccionesDTO = null;
 		transaccionesDTO = transactionService.getDTOs(transacciones);
 		return transaccionesDTO;
@@ -173,11 +176,11 @@ public class AutomovilistaService {
 	
 	@Scheduled(cron = "0 0 20 * * MON-FRI")
 	public void endAllUsersParking() {
-		List<Automovilista> automovilistas = this.automovilistaRepository.findAll();
-		for (Automovilista automovilista: automovilistas) {
-			if(this.isParked(automovilista).isParked()) {				
+		List<User> users = this.userRepository.findAll();
+		for (User user: users) {
+			if(this.isParked(user).isParked()) {				
 				try {
-					this.endParking(automovilista);
+					this.endParking(user);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

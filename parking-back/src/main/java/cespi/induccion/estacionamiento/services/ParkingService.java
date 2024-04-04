@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cespi.induccion.estacionamiento.models.Automovilista;
+import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.models.ConsumptionTransaction;
 import cespi.induccion.estacionamiento.models.Parking;
 import cespi.induccion.estacionamiento.models.Transaction;
-import cespi.induccion.estacionamiento.repositories.AutomovilistaRepository;
+import cespi.induccion.estacionamiento.repositories.UserRepository;
 import cespi.induccion.estacionamiento.repositories.ParkingRepository;
 
 @Service
@@ -20,7 +20,7 @@ public class ParkingService {
 	@Autowired
 	ParkingRepository parkingRepository;
 	@Autowired
-	AutomovilistaRepository automovilistaRepository;
+	UserRepository userRepository;
 	
 	public boolean isParked(String plate) {
 		List<Parking> parkedCars = parkingRepository.findAll();
@@ -32,13 +32,13 @@ public class ParkingService {
 		return false;
 	}
 	
-	public void park(Automovilista automovilista, String licensePlate) throws Exception{
+	public void park(User user, String licensePlate) throws Exception{
 		//Chequea si el vehiculo está estacionado y si el vehiculo le pertenece al automovilista. Si lo está, no lo estaciona
 		if (!this.isParked(licensePlate)) {
-			if (automovilista.getParking() == null) {
+			if (user.getParking() == null) {
 				//Si el automovilista existe y no está estacionado, lo estaciona
-				automovilista.start(licensePlate);
-				parkingRepository.save(automovilista.getParking());
+				user.start(licensePlate);
+				parkingRepository.save(user.getParking());
 				System.out.println("Estacionamiento iniciado");
 			}
 			else {					
@@ -49,10 +49,10 @@ public class ParkingService {
 		} 
 	}
 	
-	public double unpark(Automovilista automovilista) {
+	public double unpark(User user) {
 		//Si el automovilista existe, finaliza el estacionamiento
-		Parking parking = automovilista.getParking();
-		double monto = automovilista.end();
+		Parking parking = user.getParking();
+		double monto = user.end();
 		parkingRepository.delete(parking);
 		System.out.println("parking eliminado");
 		return monto;

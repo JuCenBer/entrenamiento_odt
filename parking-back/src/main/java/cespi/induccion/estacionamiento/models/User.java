@@ -3,7 +3,7 @@ package cespi.induccion.estacionamiento.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import cespi.induccion.estacionamiento.DTO.AutomovilistaDTO;
+import cespi.induccion.estacionamiento.DTO.UserDTO;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,10 +15,12 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 
 @Entity
-public class Automovilista {
+@Table(name="usuario")
+public class User {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -46,11 +48,11 @@ public class Automovilista {
 	@ManyToMany
 	private List<Role> roles = new ArrayList<Role>();
 	
-	public Automovilista() {
+	public User() {
 		
 	}
 	
-	public Automovilista(String cellphone, String password, BankAccount bankAccount, City city) {
+	public User(String cellphone, String password, BankAccount bankAccount, City city) {
 		this.cellphone = cellphone;
 		this.password = password;
 		this.bankAccount = bankAccount;
@@ -153,11 +155,11 @@ public class Automovilista {
 		return permissionsDTO;
 	}
 	
-	public AutomovilistaDTO getDTO() {
-		AutomovilistaDTO automovilistaDTO = new AutomovilistaDTO();
-		automovilistaDTO.setCellphone(cellphone);
-		automovilistaDTO.setPermissions(this.getPermissions());
-		automovilistaDTO.setVehiculos(this.getVehiculos());
-		return automovilistaDTO;
+	public UserDTO getDTO() {
+		UserDTO userDTO = new UserDTO();
+		userDTO.setCellphone(cellphone);
+		userDTO.setPermissions(this.getPermissions());
+		userDTO.setVehiculos(this.getVehiculos());
+		return userDTO;
 	}
 }
