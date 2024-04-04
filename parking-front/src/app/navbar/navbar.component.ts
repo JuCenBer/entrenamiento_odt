@@ -13,13 +13,14 @@ import { RouterLink } from '@angular/router';
 export class NavbarComponent {
   
   permissions: string[] = [];
+  isLoggedIn: boolean = false;
 
   constructor(private auth: AuthService){
-
-  }
-
-  ngOnInit():void{
-    this.getPermissions();
+    this.auth.isLoggedIn.subscribe( value => {
+      this.isLoggedIn = value;
+      this.getPermissions();
+    });
+    console.log(this.permissions)
   }
 
   isLogged(): boolean{

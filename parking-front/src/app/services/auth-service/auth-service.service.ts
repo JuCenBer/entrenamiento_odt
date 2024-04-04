@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginData } from '../../models/login-data';
 import { User } from '../../models/user';
 import { enviromentUrl } from '../../enviroment/enviroment.component';
@@ -11,6 +11,7 @@ import { RegisterData } from '../../models/register-data';
 export class AuthService {
   constructor(private router: Router, private http: HttpClient) { }
 
+  public isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   loginUser(loginData: LoginData): Observable<any>{
     return this.http.post<User>(enviromentUrl.apiUrl +'/auth/login', loginData)
   }

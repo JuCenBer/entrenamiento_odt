@@ -1,4 +1,4 @@
-<div *ngIf="isLogged()">
+<div *ngIf="isLogged() && this.permissions.length > 0">
     <nav class="navbar navbar-expand-lg bg-dark bg-body-tertiary border-bottom border-body" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Parking</a>

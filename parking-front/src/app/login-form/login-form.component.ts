@@ -38,6 +38,7 @@ export class LoginFormComponent {
           localStorage.setItem("token", data.token);
           localStorage.setItem("permissions", JSON.stringify(data.permissions));
           localStorage.setItem("username", cellphoneTrim);
+          this.authService.isLoggedIn.next(true);
           if (localStorage.getItem("permissions")?.includes("Park")){
             this.router.navigate(["home"]);
           }
