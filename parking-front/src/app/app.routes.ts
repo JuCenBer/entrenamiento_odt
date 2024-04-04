@@ -5,7 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { TransactionsComponent } from './transactions/transactions.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
-import { SellComponent } from './models/sell/sell.component';
+import { SellComponent } from './sell/sell.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full'},

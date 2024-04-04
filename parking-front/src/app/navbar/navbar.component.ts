@@ -20,7 +20,6 @@ export class NavbarComponent {
       this.isLoggedIn = value;
       this.getPermissions();
     });
-    console.log(this.permissions)
   }
 
   isLogged(): boolean{
