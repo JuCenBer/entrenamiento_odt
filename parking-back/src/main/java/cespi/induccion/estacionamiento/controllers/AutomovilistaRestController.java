@@ -1,5 +1,6 @@
 package cespi.induccion.estacionamiento.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import cespi.induccion.estacionamiento.DTO.TransactionDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
 import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.services.AutomovilistaService;
+import cespi.induccion.estacionamiento.services.CityService;
 import cespi.induccion.estacionamiento.services.VehiculoService;
 
 @RestController
@@ -34,6 +36,8 @@ public class AutomovilistaRestController {
 	private AutomovilistaService automovilistaService;
 	@Autowired
 	private VehiculoService vehiculoService;
+	@Autowired
+	private CityService cityService;
 	
 	@GetMapping(value="/all") //para usar de prueba
 	public ResponseEntity<List<User>> listAllUsers() {
@@ -73,6 +77,10 @@ public class AutomovilistaRestController {
 	@PostMapping(value="/start_parking")
 	public ResponseEntity<?> startParking(@RequestHeader("JWT") String token, @RequestBody VehiculoDTO vehiculoDTO){
 		User user = null;
+		if(!this.cityService.esDiaHabil(LocalDate.now())) {
+			ErrorMessage error = new ErrorMessage(400, "Hoy no es dia habil.");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
+		}
 		if(automovilistaService.getUser(token) == null) {
 			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
