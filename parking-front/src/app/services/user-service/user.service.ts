@@ -41,4 +41,8 @@ export class UserService {
   getTransactions(): Observable<any>{
     return this.http.get<Transaction[]>(enviromentUrl.apiUrl+"/users/transactions");
   }
+
+  recharge(rechargeData: any): Observable<any>{
+    return this.http.post<Transaction[]>(enviromentUrl.apiUrl+"/seller/recharge", rechargeData, httpOptions);
+  }
 }

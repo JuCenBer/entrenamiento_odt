@@ -42,7 +42,7 @@ public class AutomovilistaRestController {
 			 return new ResponseEntity<List<User>>(users, HttpStatus.NO_CONTENT);
 		}
 		 	return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-		}
+	}
 	
 	@GetMapping(value="/{id}")
 	 public ResponseEntity<?> getUser(@PathVariable("id") long id) {

@@ -31,8 +31,8 @@ public class TransactionService {
 		return consumption;
 	}
 	
-	public Transaction createRecharge() {
-		RechargeTransaction recharge = new RechargeTransaction();
+	public Transaction createRecharge(double monto, double newBalance, String operacion) {
+		RechargeTransaction recharge = new RechargeTransaction(monto, newBalance, operacion);
 		this.saveTransaction(recharge);
 		return recharge;
 	}

@@ -24,6 +24,15 @@ public class BankAccountService {
 		return newBalance;
 	}
 	
+	public double addBalance(User user, double amount) {
+		BankAccount account = user.getBankAccount();
+		double balance = account.getBalance();
+		double newBalance = balance+amount;
+		account.setBalance(newBalance);
+		bankAccountRepository.save(account);
+		return newBalance;
+	}
+	
 	public BankAccount create() {
 		BankAccount account = new BankAccount();
 		this.bankAccountRepository.save(account);

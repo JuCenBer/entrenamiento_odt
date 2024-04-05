@@ -22,7 +22,13 @@
             <div class="row mb-3">
                 <button type="submit" class="btn btn-success" [disabled]="!sellForm.valid">Cargar Saldo</button>
             </div>
-            {{ errorMsg.message }}
         </form>
+        <div *ngIf="this.status.failed" class="alert alert-danger">
+            {{ errorMsg.message }}
+        </div>
+        <div *ngIf="this.status.success" class="alert alert-success">
+            La recarga se realizo con exito
+        </div>
     </div>
 </div>
+{{pepito}}
