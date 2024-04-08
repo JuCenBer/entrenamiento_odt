@@ -16,7 +16,6 @@ export class AllTransactionsStrategy extends TransactionFilteringStrategy{
         this.getTransactionComponent().transacciones?.forEach((transaction) => {
             allTransactions = ConsumptionOnlyStrategy.addConsumption(transaction, allTransactions);
             allTransactions = RechargeOnlyStrategy.addRecharge(transaction, allTransactions);
-            console.log(transaction.date)
         })
         return this.sortByDate(allTransactions);
     }

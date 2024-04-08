@@ -26,9 +26,9 @@ export class RegisterFormComponent {
   }
 
   registerForm = new FormGroup({
-    cellphone: new FormControl('', [Validators.nullValidator, Validators.minLength(10)]),
-    password: new FormControl('', [Validators.nullValidator, Validators.minLength(5)]),
-    repeatPassword: new FormControl('', [Validators.nullValidator, Validators.minLength(5)]),
+    cellphone: new FormControl('', [Validators.required, Validators.minLength(10), Validators.pattern("^[0-9]*$")]),
+    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    repeatPassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
   })
 
   onSubmit(){
