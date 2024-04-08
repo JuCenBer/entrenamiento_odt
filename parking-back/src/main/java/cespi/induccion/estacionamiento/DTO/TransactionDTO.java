@@ -1,10 +1,13 @@
 package cespi.induccion.estacionamiento.DTO;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class TransactionDTO {
 
-	private LocalDate date;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+	private LocalDateTime date;
 	private double amount;
 	private double newBalance;
 	private String operation;
@@ -13,7 +16,7 @@ public class TransactionDTO {
 	public TransactionDTO() {
 	}
 	
-	public TransactionDTO(LocalDate date, double amount, double newBalance, String operation, String type) {
+	public TransactionDTO(LocalDateTime date, double amount, double newBalance, String operation, String type) {
 		this.date = date;
 		this.amount = amount;
 		this.newBalance = newBalance;
@@ -21,11 +24,11 @@ public class TransactionDTO {
 		this.type = type;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

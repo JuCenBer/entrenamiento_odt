@@ -160,6 +160,10 @@ public class User {
 		userDTO.setCellphone(cellphone);
 		userDTO.setPermissions(this.getPermissions());
 		userDTO.setVehiculos(this.getVehiculos());
+		try {			
+			userDTO.setBalance(this.getBankAccount().getBalance());
+		} catch (Exception e) {
+		}
 		return userDTO;
 	}
 }

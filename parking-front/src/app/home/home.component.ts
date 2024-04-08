@@ -48,22 +48,10 @@ export class HomeComponent {
       next: (data) =>{
         localStorage.setItem("balance", data.balance);
         this.balance = data.balance;
-        console.log(data.vehiculos);
+        localStorage.setItem("vehiculos", JSON.stringify(data.vehiculos));
         this.vehiculos = data.vehiculos;
       }
     })
-  }
-
-  getVehiculos():void{
-    this.userService.getVehiculos().subscribe({
-      error: (e) => {
-          this.errorMsg = e.error
-          console.log(this.errorMsg.message +" "+ this.errorMsg.status)
-        },
-        next: (data) =>{
-          this.vehiculos = data;
-        }
-      });
   }
 
   isParked():void{

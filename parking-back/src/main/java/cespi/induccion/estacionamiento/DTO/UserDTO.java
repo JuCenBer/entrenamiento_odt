@@ -16,6 +16,7 @@ public class UserDTO {
 	private List<String> vehiculos;
 	private List<String> permissions;
 	private String token;
+	private double balance;
 
 	public UserDTO() {
 		
@@ -62,5 +63,14 @@ public class UserDTO {
 	public void setToken(String token) {
 		this.token = token;
 	}
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+	
 	
 }

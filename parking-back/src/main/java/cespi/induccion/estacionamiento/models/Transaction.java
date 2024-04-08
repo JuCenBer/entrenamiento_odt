@@ -1,6 +1,7 @@
 package cespi.induccion.estacionamiento.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import cespi.induccion.estacionamiento.DTO.TransactionDTO;
 import jakarta.persistence.Entity;
@@ -15,7 +16,7 @@ public abstract class Transaction {
 
 	@Id @GeneratedValue
 	private Long id;
-	private LocalDate date;
+	private LocalDateTime date;
 	private double amount;
 	private double newBalance;
 	private String operation;
@@ -25,17 +26,17 @@ public abstract class Transaction {
 	}
 	
 	public Transaction(double amount, double newBalance, String operation) {
-		this.date = LocalDate.now();
+		this.date = LocalDateTime.now();
 		this.amount = amount;
 		this.newBalance = newBalance;
 		this.operation = operation;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

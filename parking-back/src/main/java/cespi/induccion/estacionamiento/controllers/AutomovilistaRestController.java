@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cespi.induccion.estacionamiento.DTO.ErrorMessage;
 import cespi.induccion.estacionamiento.DTO.ParkingDTO;
 import cespi.induccion.estacionamiento.DTO.TransactionDTO;
+import cespi.induccion.estacionamiento.DTO.UserDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
 import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.services.AutomovilistaService;
@@ -48,16 +49,19 @@ public class AutomovilistaRestController {
 		 	return new ResponseEntity<List<User>>(users, HttpStatus.OK);
 	}
 	
-	@GetMapping(value="/{id}")
-	 public ResponseEntity<?> getUser(@PathVariable("id") long id) {
+	@GetMapping(value="/user")
+	 public ResponseEntity<?> getUser(@RequestHeader("JWT") String token) {
 		User user = null;
+		UserDTO dto = null;
 		try {
-			user = automovilistaService.findById(id);						
+			user = automovilistaService.findByCellphone(token);
+			dto = user.getDTO();
+			System.out.println("automovilista encontrado");	
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(404, "El usuario no existe");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
 		}
-	 	return new ResponseEntity<User>(user, HttpStatus.OK);
+	 	return new ResponseEntity<UserDTO>(dto, HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/vehicles")
@@ -117,8 +121,8 @@ public class AutomovilistaRestController {
 			e.printStackTrace();
 		}
 		try {
-			automovilistaService.endParking(user);
-			return new ResponseEntity<Void>(HttpStatus.OK);
+			UserDTO dto = automovilistaService.endParking(user);
+			return new ResponseEntity<UserDTO>(dto, HttpStatus.OK);
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(400, e.getMessage().toString());
 			System.out.println(e.getMessage());

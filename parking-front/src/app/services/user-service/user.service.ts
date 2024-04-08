@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { enviromentUrl } from '../../enviroment/enviroment.component';
@@ -18,7 +18,9 @@ export class UserService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  
+  public gotTransactions: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+
   startParking(parkingData: any):Observable<any>{
     return this.http.post<any>(enviromentUrl.apiUrl+"/users/start_parking", parkingData, httpOptions)
   }

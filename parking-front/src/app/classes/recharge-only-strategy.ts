@@ -14,7 +14,7 @@ export class RechargeOnlyStrategy extends TransactionFilteringStrategy{
         this.getTransactionComponent().transacciones!.forEach((transaction) => {
             transactionList = RechargeOnlyStrategy.addRecharge(transaction, transactionList);
         })
-        return transactionList;
+        return this.sortByDate(transactionList);
     }
 
     public static addRecharge(transaction: RechargeTransaction, transactionList:Transaction[]): Transaction[]{

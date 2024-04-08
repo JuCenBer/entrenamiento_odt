@@ -45,9 +45,12 @@ public class AutomovilistaService {
 		try {			
 			User user = this.findByCellphone(loginDTO.getCellphone());
 			UserDTO dto = user.getDTO();
+			System.out.println(user.getPassword());
+			System.out.println(loginDTO.getPassword());
 			if(!user.getPassword().equals(loginDTO.getPassword())) throw new Exception("Credenciales invalidas.");
 			else return dto;
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			throw new Exception("Credenciales invalidas.");
 		}
 	}
@@ -104,7 +107,7 @@ public class AutomovilistaService {
 		}
 	}
 
-	public void endParking(User user) throws Exception{
+	public UserDTO endParking(User user) throws Exception{
 		//Chequea si el vehiculo está estacionado. Si lo está, termina el estacionamiento.
 		if (user.getParking() != null) { 
 				double monto = parkingService.unpark(user);
@@ -113,6 +116,7 @@ public class AutomovilistaService {
 				user.addTransaction(consumo);
 				userRepository.save(user);
 				System.out.println("Estacionamiento terminado. El valor del mismo es: "+ monto);
+				return user.getDTO();
 		}
 		else throw new Exception("El automovilista no existe o no se encuentra estacionado");
 	}

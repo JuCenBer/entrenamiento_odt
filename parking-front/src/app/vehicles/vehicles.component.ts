@@ -13,7 +13,7 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
 })
 export class VehiclesComponent {
 
-  vehicles:String[]=[];
+  vehicles:String[]= JSON.parse(localStorage.getItem("vehiculos")!);
   errorMsg: ErrorMessage={
     message:'',
     status:0,
@@ -27,21 +27,6 @@ export class VehiclesComponent {
     licensePlate: new FormControl('', [Validators.required, Validators.nullValidator, Validators.min(6)]),
   })
 
-  ngOnInit():void{
-    this.getVehicles();
-  }
-
-  getVehicles():void{
-    this.userService.getVehiculos().subscribe({
-      error: (e) => {
-        this.errorMsg = e.error;
-      },
-      next: (data) =>{
-        this.vehicles = data;
-      }
-    });
-  }
-
   addVehicle():void{
     let vehicle: string = this.vehicleForm.value.licensePlate!.trim()
     let vehicleData = JSON.stringify(vehicle).trim()
@@ -51,6 +36,7 @@ export class VehiclesComponent {
       },
       next: (data) => {
         this.vehicles = data;
+        localStorage.setItem("vehiculos", JSON.stringify(data));
         this.vehicleForm.get("licensePlate")?.setValue(null)
         this.errorMsg.message = ""
         this.errorMsg.status = 0

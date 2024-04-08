@@ -27,13 +27,10 @@ export class TransactionsComponent{
   }
 
   constructor(private userService: UserService){
-
   }
   
   ngOnInit(){
     this.getTransactions();
-    this.filteringStrategy = new AllTransactionsStrategy(this)
-    this.filteredTransactions = this.filteringStrategy.filter()
   }
 
   getTransactions(): void{
@@ -43,6 +40,7 @@ export class TransactionsComponent{
       },
       next: (data) =>{
         this.transacciones = data;
+        this.setTransactionFilteringStrategy(new AllTransactionsStrategy(this))
       }
     })
   }

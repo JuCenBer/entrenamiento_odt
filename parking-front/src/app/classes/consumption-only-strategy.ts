@@ -14,7 +14,7 @@ export class ConsumptionOnlyStrategy extends TransactionFilteringStrategy{
         this.getTransactionComponent().transacciones!.forEach((transaction) => {
             transactionList = ConsumptionOnlyStrategy.addConsumption(transaction, transactionList);
         })
-        return transactionList;
+        return this.sortByDate(transactionList);
     }
 
     public static addConsumption(transaction: ConsumptionTransaction, transactionList:Transaction[]): Transaction[]{
