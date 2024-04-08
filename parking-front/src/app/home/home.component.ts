@@ -26,19 +26,33 @@ export class HomeComponent {
   };
 
   cellphone: string = localStorage.getItem("username")!;
+  balance!: number;
   
   constructor(private userService: UserService){
   }
 
   ngOnInit():void{
-    this.getVehiculos();
     this.isParked();
-    //preguntar si la persona esta estacionada
+    this.getUserInfo();
   }
 
   public parkingForm = new FormGroup({
     vehicle: new FormControl('', [Validators.required,Validators.nullValidator]),
   });
+
+  getUserInfo():void{
+    this.userService.getUserInformation().subscribe({
+      error: (e) =>{
+        this.errorMsg = e.error;
+      },
+      next: (data) =>{
+        localStorage.setItem("balance", data.balance);
+        this.balance = data.balance;
+        console.log(data.vehiculos);
+        this.vehiculos = data.vehiculos;
+      }
+    })
+  }
 
   getVehiculos():void{
     this.userService.getVehiculos().subscribe({
@@ -76,8 +90,6 @@ export class HomeComponent {
         this.parkingInfo.parked = true;
         this.parkingInfo.parkedCarLicensePlate = this.parkingForm.value.vehicle!.trim();
         this.parkingForm.get("vehicles")?.disable()
-        //bloquear el selector de vehiculos y cambiar de 
-        //color el boton de iniciar estacionamiento
       }
      })
   }
@@ -88,12 +100,14 @@ export class HomeComponent {
         this.errorMsg = e.error
       },
       next: (data)=>{
+        localStorage.setItem("balance", data.balance);
         this.parkingInfo.parked = false;
         this.parkingInfo.parkedCarLicensePlate = "";
         this.parkingForm.get("vehicle")?.setValue(null)
+        this.parkingForm.get("vehicle")?.enable()
+        this.getUserInfo();
       }
     })
   }
 
-  
 }

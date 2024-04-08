@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { enviromentUrl } from '../../enviroment/enviroment.component';
 import { Parking } from '../../models/parking';
 import { Transaction } from '../../models/transaction';
+import { User } from '../../models/user';
 const httpOptions = {
 
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -44,5 +45,9 @@ export class UserService {
 
   recharge(rechargeData: any): Observable<any>{
     return this.http.post<Transaction[]>(enviromentUrl.apiUrl+"/seller/recharge", rechargeData, httpOptions);
+  }
+
+  getUserInformation(): Observable<any>{
+    return this.http.get<User>(enviromentUrl.apiUrl + "/users/user");
   }
 }
