@@ -28,7 +28,7 @@ export class LoginFormComponent {
 
   public onSubmit(){
     const cellphoneTrim = this.loginForm.value.cellphone!.trim()
-    const passwordTrim = this.loginForm.value.password!.trim().toLowerCase()
+    const passwordTrim = this.loginForm.value.password!.trim()
     if(this.loginForm.valid){
       this.authService.loginUser(new LoginData(cellphoneTrim, passwordTrim)).subscribe({
         error: (e) => {
