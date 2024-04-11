@@ -37,18 +37,15 @@ public class SellerRestController {
 	PermissionRepository permissionRepository;
 	
 	@PostMapping(value="/recharge")
-	public ResponseEntity<?> recharge(@RequestHeader("JWT") String token, @RequestBody RechargeDTO rechargeDTO){
+	public ResponseEntity<?> recharge(@RequestHeader("Authorization") String token, @RequestBody RechargeDTO rechargeDTO){
 		if(rechargeDTO.getAmount() < 100) {
 			ErrorMessage error = new ErrorMessage(400, "El monto debe ser minimo de $100");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
 		User seller;
-		if(automovilistaService.getUser(token) == null) {
-			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
-		}
+		String username = this.authorizationService.getUser(token);
 		try {
-			seller = automovilistaService.findByCellphone(token);
+			seller = automovilistaService.findByCellphone(username);
 			System.out.println("Usuario encontrado");
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");

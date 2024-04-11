@@ -24,9 +24,11 @@ import cespi.induccion.estacionamiento.DTO.TransactionDTO;
 import cespi.induccion.estacionamiento.DTO.UserDTO;
 import cespi.induccion.estacionamiento.DTO.VehiculoDTO;
 import cespi.induccion.estacionamiento.models.User;
+import cespi.induccion.estacionamiento.services.AuthorizationService;
 import cespi.induccion.estacionamiento.services.AutomovilistaService;
 import cespi.induccion.estacionamiento.services.CityService;
 import cespi.induccion.estacionamiento.services.VehiculoService;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @CrossOrigin
@@ -39,6 +41,8 @@ public class AutomovilistaRestController {
 	private VehiculoService vehiculoService;
 	@Autowired
 	private CityService cityService;
+	@Autowired
+	private AuthorizationService authorizationService;
 	
 	@GetMapping(value="/all") //para usar de prueba
 	public ResponseEntity<List<User>> listAllUsers() {
@@ -50,11 +54,12 @@ public class AutomovilistaRestController {
 	}
 	
 	@GetMapping(value="/user")
-	 public ResponseEntity<?> getUser(@RequestHeader("JWT") String token) {
-		User user = null;
+	 public ResponseEntity<?> getUser(@RequestHeader("Authorization") String token) {
+		User user;
+		String username = this.authorizationService.getUser(token);
 		UserDTO dto = null;
 		try {
-			user = automovilistaService.findByCellphone(token);
+			user = automovilistaService.findByCellphone(username);
 			dto = user.getDTO();
 			System.out.println("automovilista encontrado");	
 		} catch (Exception e) {
@@ -65,11 +70,12 @@ public class AutomovilistaRestController {
 	}
 	
 	@GetMapping(value="/vehicles")
-	public ResponseEntity<?> getUserVehicles(@RequestHeader("jwt") String token){
+	public ResponseEntity<?> getUserVehicles(@RequestHeader("Authorization") String token){
 		List<String> vehiculos = null;
-		User user = null;
+		User user;
+		String username = this.authorizationService.getUser(token);
 		try {
-			user = automovilistaService.findByCellphone(token);
+			user = automovilistaService.findByCellphone(username);
 			vehiculos = automovilistaService.getVehicles(user);
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(404, "El usuario no existe");
@@ -79,18 +85,15 @@ public class AutomovilistaRestController {
 	}
 	
 	@PostMapping(value="/start_parking")
-	public ResponseEntity<?> startParking(@RequestHeader("JWT") String token, @RequestBody VehiculoDTO vehiculoDTO){
+	public ResponseEntity<?> startParking(@RequestHeader("Authorization") String token, @RequestBody VehiculoDTO vehiculoDTO){
 		User user = null;
+		String username = this.authorizationService.getUser(token);
 		if(!this.cityService.esDiaHabil(LocalDate.now())) {
 			ErrorMessage error = new ErrorMessage(400, "Hoy no es dia habil.");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
-		if(automovilistaService.getUser(token) == null) {
-			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
-		}
 		try {
-			user = automovilistaService.findByCellphone(token);
+			user = automovilistaService.findByCellphone(username);
 			System.out.println("automovilista encontrado");
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
@@ -107,15 +110,12 @@ public class AutomovilistaRestController {
 	}
 	
 	@PostMapping(value="/end_parking")
-	public ResponseEntity<?> endParking(@RequestHeader("JWT") String token){
+	public ResponseEntity<?> endParking(@RequestHeader("Authorization") String token){
 		//El id pertenece al automovilista que quiere finalizar el estacionamiento, y la patente es del vehiculo cuyo estacionamiento se quiere terminar.
 		User user = null;
-		if(automovilistaService.getUser(token) == null) {
-			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
-		}
+		String username = this.authorizationService.getUser(token);
 		try {
-			user = automovilistaService.findByCellphone(token);
+			user = automovilistaService.findByCellphone(username);
 			System.out.println("automovilista encontrado");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,16 +131,13 @@ public class AutomovilistaRestController {
 	}
 	
 	@PutMapping(value="/add_vehicle")
-	public ResponseEntity<?> addVehicle(@RequestHeader("JWT") String token, @RequestBody VehiculoDTO vehiculoDTO){
+	public ResponseEntity<?> addVehicle(@RequestHeader("Authorization") String token, @RequestBody VehiculoDTO vehiculoDTO){
 		System.out.println(vehiculoDTO.getLicensePlate());
 		User user = null;
+		String username = this.authorizationService.getUser(token);
 		List<String> vehicles = null;
-		if(automovilistaService.getUser(token) == null) {
-			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
-		}
 		try {
-			user = automovilistaService.findByCellphone(token);
+			user = automovilistaService.findByCellphone(username);
 			System.out.println("automovilista encontrado");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -160,10 +157,11 @@ public class AutomovilistaRestController {
 	}
 	
 	@GetMapping(value="/parking_status")
-	public ResponseEntity<?> isParked(@RequestHeader("JWT") String token){
+	public ResponseEntity<?> isParked(@RequestHeader("Authorization") String token){
 		User user = null;
+		String username = this.authorizationService.getUser(token);
 		try {
-			user = automovilistaService.findByCellphone(token);
+			user = automovilistaService.findByCellphone(username);
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(400, "Credenciales invalidas");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
@@ -174,11 +172,12 @@ public class AutomovilistaRestController {
 	}
 	
 	@GetMapping(value="/transactions")
-	public ResponseEntity<?> getUserTransactions(@RequestHeader("JWT") String token){
+	public ResponseEntity<?> getUserTransactions(@RequestHeader("Authorization") String token){
 		List<TransactionDTO> transacciones = null;
 		User user = null;
+		String username = this.authorizationService.getUser(token);
 		try {
-			user = automovilistaService.findByCellphone(token);
+			user = automovilistaService.findByCellphone(username);
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(400, "Credenciales invalidas");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);

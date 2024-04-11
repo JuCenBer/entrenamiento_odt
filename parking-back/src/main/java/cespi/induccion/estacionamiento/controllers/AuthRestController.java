@@ -44,7 +44,7 @@ public class AuthRestController {
 		catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-	try {
+		try {
 			UserDTO dto = automovilistaService.register(user);
 			dto.setToken(user.getCellphone());
 			return new ResponseEntity<UserDTO>(dto, HttpStatus.CREATED);
@@ -64,7 +64,8 @@ public class AuthRestController {
 		}
 		try {
 			UserDTO dto = automovilistaService.login(loginDTO);
-			dto.setToken(loginDTO.getCellphone());
+			System.out.println(dto.getCellphone());
+			dto.setToken(this.authorizationService.generateToken(dto.getCellphone()));
 			return new ResponseEntity<UserDTO>(dto, HttpStatus.OK);
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");
@@ -73,15 +74,12 @@ public class AuthRestController {
 	}
 	
 	@PostMapping(value="/has_permission")
-	public ResponseEntity<?> hasPermission(@RequestHeader("JWT") String token, @RequestBody Permission permission){
+	public ResponseEntity<?> hasPermission(@RequestHeader("Authorization") String token, @RequestBody Permission permission){
 		boolean hasPermission = false;
-		User user = null;
-		if(automovilistaService.getUser(token) == null) {
-			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
-		}
+		User user;
+		String username = this.authorizationService.getUser(token);
 		try {
-			user = automovilistaService.findByCellphone(token);
+			user = automovilistaService.findByCellphone(username);
 			System.out.println("automovilista encontrado");
 		} catch (Exception e) {
 			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
