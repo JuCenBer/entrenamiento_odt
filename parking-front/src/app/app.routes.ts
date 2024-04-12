@@ -8,7 +8,7 @@ import { RegisterFormComponent } from './register-form/register-form.component';
 import { SellComponent } from './sell/sell.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full'},
+    { path: '', redirectTo: '/login', pathMatch: 'full'},
     { path: 'login', component: LoginFormComponent},
     { path: 'register', component: RegisterFormComponent},
     { path: 'home', component: HomeComponent},

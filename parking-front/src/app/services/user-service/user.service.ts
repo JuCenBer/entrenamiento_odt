@@ -7,12 +7,6 @@ import { Parking } from '../../models/parking';
 import { Transaction } from '../../models/transaction';
 import { User } from '../../models/user';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-  })
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -24,11 +18,11 @@ export class UserService {
 
 
   startParking(parkingData: any):Observable<any>{
-    return this.http.post<any>(enviromentUrl.apiUrl+"/users/start_parking", parkingData, httpOptions)
+    return this.http.post<any>(enviromentUrl.apiUrl+"/users/start_parking", parkingData)
   }
   
   endParking():Observable<any>{
-    return this.http.post<any>(enviromentUrl.apiUrl+"/users/end_parking", httpOptions);
+    return this.http.post<any>(enviromentUrl.apiUrl+"/users/end_parking", null);
   }
   
   isParked():Observable<any>{
@@ -40,7 +34,7 @@ export class UserService {
   }
 
   addVehicle(vehicleData: any): Observable<any>{
-    return this.http.put<string[]>(enviromentUrl.apiUrl+"/users/add_vehicle", vehicleData, httpOptions)
+    return this.http.put<string[]>(enviromentUrl.apiUrl+"/users/add_vehicle", vehicleData)
   }
 
   getTransactions(): Observable<any>{
@@ -48,10 +42,14 @@ export class UserService {
   }
 
   recharge(rechargeData: any): Observable<any>{
-    return this.http.post<Transaction[]>(enviromentUrl.apiUrl+"/seller/recharge", rechargeData, httpOptions);
+    return this.http.post<Transaction[]>(enviromentUrl.apiUrl+"/seller/recharge", rechargeData);
   }
 
   getUserInformation(): Observable<any>{
     return this.http.get<User>(enviromentUrl.apiUrl + "/users/user");
+  }
+
+  hasPermission(permission: String, permissions: String[]): boolean{
+    return permissions.includes(permission);
   }
 }

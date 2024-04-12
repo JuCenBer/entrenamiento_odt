@@ -5,6 +5,7 @@ import { LoginData } from '../models/login-data';
 import { Router, RouterLink } from '@angular/router';
 import { ErrorMessage } from '../models/error-message';
 import { AppComponent } from '../app.component';
+import { UserService } from '../services/user-service/user.service';
 
 @Component({
   standalone: true,
@@ -19,7 +20,17 @@ export class LoginFormComponent {
     message: "",
     status: 0
   }
-  constructor(private authService: AuthService, private router: Router){}
+  constructor(private authService: AuthService, private router: Router, private userService: UserService){
+    this.authService.isLoggedIn.subscribe( value => {
+      let permissions = JSON.parse(localStorage.getItem("permissions")!);
+      if (this.userService.hasPermission("Park", permissions)){
+        router.navigate(["home"])
+      }
+      if (this.userService.hasPermission("Sell", permissions)){
+        router.navigate(["sell"])
+      }
+    });
+  }
 
   public loginForm = new FormGroup({
     cellphone: new FormControl('', Validators.required),

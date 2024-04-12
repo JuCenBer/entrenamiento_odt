@@ -25,7 +25,6 @@ import jakarta.servlet.http.HttpServletResponse;
 		filterName="jwt-auth-filter", 
 		urlPatterns="*"
 )
-@CrossOrigin("http://localhost:4200")
 @Component
 public class JWTAuthenticationFilter implements Filter{
 
@@ -51,7 +50,8 @@ public class JWTAuthenticationFilter implements Filter{
 		if ((token == null) || !AuthorizationService.validateToken(token)) {
 			HttpServletResponse res = (HttpServletResponse) response;
 			System.out.println("ES NULL");
-			res.setStatus(HttpStatus.FORBIDDEN.value());
+            res.setStatus(HttpStatus.FORBIDDEN.value());
+            res.setHeader("Access-Control-Allow-Origin", "*");
 			return;
 		}
 		chain.doFilter(request, response);
