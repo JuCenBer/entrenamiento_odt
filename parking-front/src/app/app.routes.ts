@@ -6,14 +6,15 @@ import { TransactionsComponent } from './transactions/transactions.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { SellComponent } from './sell/sell.component';
+import { authGuard, automovilistaGuard, sellerGuard } from './auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full'},
     { path: 'login', component: LoginFormComponent},
     { path: 'register', component: RegisterFormComponent},
-    { path: 'home', component: HomeComponent},
-    { path: 'sell', component: SellComponent},
-    { path: 'transactions', component: TransactionsComponent},
-    { path: 'vehicles', component: VehiclesComponent},
+    { path: 'home', component: HomeComponent, canActivate: [authGuard, automovilistaGuard]},
+    { path: 'sell', component: SellComponent, canActivate: [authGuard, sellerGuard]},
+    { path: 'transactions', component: TransactionsComponent, canActivate: [authGuard]},
+    { path: 'vehicles', component: VehiclesComponent, canActivate: [authGuard, automovilistaGuard]},
     { path: '**', component: PageNotFoundComponent },
 ];

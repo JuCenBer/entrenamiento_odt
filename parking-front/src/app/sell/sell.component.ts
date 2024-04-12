@@ -22,7 +22,7 @@ export class SellComponent {
     failed: false,
     success: false
   }
-  pepito!: string;
+
   constructor(private userService: UserService){
 
   }

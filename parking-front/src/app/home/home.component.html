@@ -45,6 +45,8 @@
             </div>
             <button *ngIf="this.parkingInfo.parked" type="button" class="btn btn-danger" (click)="endParking()">Finalizar estacionamiento</button>  
         </form>
-        {{ errorMsg.message }}
+        <div *ngIf="this.failed" class="alert alert-danger">
+            {{ errorMsg.message }}
+        </div>
     </div>
 </div>

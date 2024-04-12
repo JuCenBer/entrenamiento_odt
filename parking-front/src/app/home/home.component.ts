@@ -27,6 +27,7 @@ export class HomeComponent {
 
   cellphone: string = localStorage.getItem("username")!;
   balance!: number;
+  failed: boolean = false
   
   constructor(private userService: UserService){
   }
@@ -72,10 +73,12 @@ export class HomeComponent {
     this.userService.startParking(parkingDataJson).subscribe({
       error:(e) =>{
         this.errorMsg = e.error;
+        this.failed = true
       },
       complete: () =>{
         this.errorMsg.message = "";
         this.parkingInfo.parked = true;
+        this.failed = false;
         this.parkingInfo.parkedCarLicensePlate = this.parkingForm.value.vehicle!.trim();
         this.parkingForm.get("vehicles")?.disable()
       }

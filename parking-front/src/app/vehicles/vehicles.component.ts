@@ -3,6 +3,8 @@ import { UserService } from '../services/user-service/user.service';
 import { ErrorMessage } from '../models/error-message';
 import { NgFor, NgIf } from '@angular/common';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth-service/auth-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-vehicles',
@@ -13,14 +15,15 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
 })
 export class VehiclesComponent {
 
+  failed: boolean = false;
+  success: boolean = false;
   vehicles:String[]= JSON.parse(localStorage.getItem("vehiculos")!);
   errorMsg: ErrorMessage={
     message:'',
     status:0,
   }
 
-  constructor(private userService: UserService){
-
+  constructor(private userService: UserService, private auth: AuthService, private router: Router){
   }
 
   vehicleForm = new FormGroup({
@@ -32,10 +35,14 @@ export class VehiclesComponent {
     let vehicleData = JSON.stringify(vehicle).trim()
     this.userService.addVehicle(vehicleData).subscribe({
       error: (e) =>{
+        this.failed = true
+        this.success = false;
         this.errorMsg = e.error;
       },
       next: (data) => {
         this.vehicles = data;
+        this.failed = false
+        this.success = true;
         localStorage.setItem("vehiculos", JSON.stringify(data));
         this.vehicleForm.get("licensePlate")?.setValue(null)
         this.errorMsg.message = ""

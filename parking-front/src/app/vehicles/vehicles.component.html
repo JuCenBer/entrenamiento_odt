@@ -12,7 +12,12 @@
                 <div class="col-auto">
                     <button type="submit" class="btn btn-success mb-3" [disabled]="!(vehicleForm.valid && vehicleForm.dirty && vehicleForm.value.licensePlate!.length>=6)">Agregar Vehiculo</button>
                 </div>
-                {{this.errorMsg.message}}
+                <div *ngIf="this.failed" class="alert alert-danger">
+                    {{ errorMsg.message }}
+                </div>
+                <div *ngIf="this.success" class="alert alert-success">
+                    El vehiculo se agrego con éxito.
+                </div>
             </form>
         </div>
     </div>

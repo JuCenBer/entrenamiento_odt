@@ -146,7 +146,7 @@ public class AutomovilistaRestController {
 			try {
 				vehicles = automovilistaService.addVehicle(user, vehiculoDTO.getLicensePlate());			
 			} catch (Exception e) {
-				ErrorMessage error = new ErrorMessage(400, "No se pudo agregar el vehiculo");
+				ErrorMessage error = new ErrorMessage(400, e.getMessage());
 				return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 			}
 		} else {

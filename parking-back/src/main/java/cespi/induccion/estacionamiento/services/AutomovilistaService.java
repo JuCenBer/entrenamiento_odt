@@ -137,9 +137,7 @@ public class AutomovilistaService {
 			System.out.println("El vehiculo pertenece al automovilista");
 			return true;
 		}
-		else {
-			throw new Exception ("Ese vehiculo no pertenece al automovilista");
-		}
+		else return false;
 	}
 	
 	public List<String> getVehicles(User user) throws Exception{
@@ -154,13 +152,10 @@ public class AutomovilistaService {
 	}
 	
 	private boolean canPark(User user, String licensePlate) throws Exception{
-		if(!user.getCity().isBusinessHour(LocalDateTime.now().getHour())){
-			throw new Exception("No es horario habil");
-		}else if((this.hasEnoughCredit(user)) && (this.hasVehicle(user, licensePlate))){
-			return true;
-		}else {
-			throw new Exception("El automovilista no tiene credito o ese vehiculo no le pertenece");
-		}
+		if(!user.getCity().isBusinessHour(LocalDateTime.now().getHour())) throw new Exception("No es horario habil");
+		if (!this.hasEnoughCredit(user)) throw new Exception("El automovilista no tiene credito suficiente");
+		if(!this.hasVehicle(user, licensePlate)) throw new Exception("Ese vehiculo no le pertenece al automovilista");
+		return true;
 	}
 	
 	public ParkingDTO isParked(User user) {

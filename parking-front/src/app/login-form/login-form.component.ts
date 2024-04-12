@@ -23,11 +23,13 @@ export class LoginFormComponent {
   constructor(private authService: AuthService, private router: Router, private userService: UserService){
     this.authService.isLoggedIn.subscribe( value => {
       let permissions = JSON.parse(localStorage.getItem("permissions")!);
-      if (this.userService.hasPermission("Park", permissions)){
-        router.navigate(["home"])
-      }
-      if (this.userService.hasPermission("Sell", permissions)){
-        router.navigate(["sell"])
+      if(permissions){
+        if (this.userService.hasPermission("Park", permissions)){
+          router.navigate(["home"])
+        }
+        if (this.userService.hasPermission("Sell", permissions)){
+          router.navigate(["sell"])
+        }
       }
     });
   }
@@ -47,6 +49,7 @@ export class LoginFormComponent {
         },
         next: (data) =>{
           localStorage.setItem("token", data.token);
+          console.log(localStorage.getItem("token"))
           localStorage.setItem("permissions", JSON.stringify(data.permissions));
           localStorage.setItem("username", cellphoneTrim);
           this.authService.isLoggedIn.next(true);
