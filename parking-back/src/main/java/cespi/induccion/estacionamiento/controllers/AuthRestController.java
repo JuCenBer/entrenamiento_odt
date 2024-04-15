@@ -46,7 +46,7 @@ public class AuthRestController {
 		}
 		try {
 			UserDTO dto = automovilistaService.register(user);
-			dto.setToken(user.getCellphone());
+			dto.setToken(this.authorizationService.generateToken(dto.getCellphone()));
 			return new ResponseEntity<UserDTO>(dto, HttpStatus.CREATED);
 		}
 		catch (Exception e) {

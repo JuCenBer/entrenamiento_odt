@@ -57,7 +57,7 @@ public class AutomovilistaService {
 	
 	public UserDTO register(User user) throws Exception {
 		UserDTO dto;
-		Role automovilistaRole = roleRepository.findById((long)1).get();
+		Role automovilistaRole = roleRepository.findByRole("Automovilista").get();
 		BankAccount account = this.bankAccountService.create();
 		City city = this.cityService.getCity();
 		user.setBankAccount(account);

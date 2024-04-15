@@ -33,18 +33,20 @@ public class JWTAuthenticationFilter implements Filter{
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		System.out.println(req.getRequestURI());
-		if("/parking-back/auth/login".equals(req.getRequestURI()) || HttpMethod.OPTIONS.matches(req.getMethod())) {
+		if("/parking-back/auth/login".equals(req.getRequestURI()) 
+				|| "/parking-back/auth/register".equals(req.getRequestURI()) 
+				|| HttpMethod.OPTIONS.matches(req.getMethod())) {
 			System.out.println("Holaaaa");
 			chain.doFilter(request, response);
 			return ;
 		}
-		Enumeration<String> headers = req.getHeaderNames();
-		if (headers != null) {
-	        while (headers.hasMoreElements()) {
-	            String name = headers.nextElement();
-	            System.out.println("Header: " + name + " value:" + req.getHeader(name));
-	        }
-	    }
+//		Enumeration<String> headers = req.getHeaderNames();
+//		if (headers != null) {
+//	        while (headers.hasMoreElements()) {
+//	            String name = headers.nextElement();
+//	            System.out.println("Header: " + name + " value:" + req.getHeader(name));
+//	        }
+//	    }
 		String token = req.getHeader(HttpHeaders.AUTHORIZATION);
 		System.out.println(token);
 		if ((token == null) || !AuthorizationService.validateToken(token)) {

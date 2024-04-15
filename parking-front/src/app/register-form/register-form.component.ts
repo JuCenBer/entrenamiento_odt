@@ -6,6 +6,8 @@ import { Router, RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { AuthService } from '../services/auth-service/auth-service.service';
 import { RegisterData } from '../models/register-data';
+import { LoginFormComponent } from '../login-form/login-form.component';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-register-form',
@@ -21,7 +23,7 @@ export class RegisterFormComponent {
     status: 0
   }
 
-  constructor(private authService: AuthService, private router: Router){
+  constructor(private authService: AuthService, private userService: UserService, private router: Router){
 
   }
 
@@ -46,10 +48,11 @@ export class RegisterFormComponent {
           localStorage.setItem("permissions", JSON.stringify(data.permissions));
           localStorage.setItem("username", cellphoneTrim);
           this.authService.isLoggedIn.next(true);
-          if (localStorage.getItem("permissions")?.includes("Park")){
+          let permissions = JSON.parse(localStorage.getItem("permissions")!)
+          if (this.userService.hasPermission("Park", permissions)){
             this.router.navigate(["home"]);
           }
-          else if(localStorage.getItem("permissions")?.includes("Sell")){
+          else if (this.userService.hasPermission("Sell", permissions)){
             this.router.navigate(["sell"]);
           }
         }

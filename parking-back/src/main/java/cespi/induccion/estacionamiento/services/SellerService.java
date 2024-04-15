@@ -31,18 +31,23 @@ public class SellerService {
 	@Autowired
 	RoleRepository roleRepository;
 	@Autowired
-	CityRepository cityRepository;
+	CityService cityService;
 	@Autowired
 	TransactionService transactionService;
 	@Autowired
 	BankAccountService bankAccountService;
 	
 	@EventListener(ApplicationReadyEvent.class)
-	public boolean checkExistingRoles() {
+	public boolean checkExistingSeller() {
 		System.out.println("Chequeando existencia de vendedor");
 		List<User> users = userRepository.findAll();
-		Role sellerRole = roleRepository.findById((long) 2).get();
-		City city = cityRepository.findById((long)1).get();
+		Role sellerRole = roleRepository.findByRole("Vendedor").get();
+		City city = null;
+		try {
+			city = cityService.getCity();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		for(User user: users) {
 			if(user.getRoles().contains(sellerRole)) return true;
 		}

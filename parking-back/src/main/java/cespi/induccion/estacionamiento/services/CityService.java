@@ -35,7 +35,7 @@ public class CityService {
 	
 	public City getCity() throws Exception{
 		City city = null;
-		city = this.cityRepository.findById((long) 1).get();
+		city = this.cityRepository.findByCity("La Plata").get();
 		return city;
 	}
 	

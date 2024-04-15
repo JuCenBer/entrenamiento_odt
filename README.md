@@ -1,7 +1,7 @@
 # Parking Application
 Ejemplo de como authorizar un usuario usando JWT con Java y Angular
 
-## Clonar el repo
+## Clonar el repositorio
 
 ```shell 
 git clone git@github.com:JuCenBer/entrenamiento_odt.git
@@ -64,3 +64,8 @@ Se encuentra programado en la clase `CityService` el metodo `checkExistingHolida
   
 Antes de iniciar el servidor, se pueden agregar más feriados a gusto. Recordar que no se popularán los feriados mencionados en la base de datos si existe por lo menos uno
 #### Vendedor
+En la clase `SellerService` se encuentra el metodo `checkExistingSeller` que verifica la existencia de al menos un vendedor. En caso de que no exista ninguno, crea uno con las siguientes credenciales para iniciar sesion:
+* username (o número de celular): vendedor
+* password: 12345
+#### Roles
+En la clase `RoleService` se encuentra el metodo `checkExistingRoles` que verifica la existencia de los roles. En caso de que la cantidad sea distinta de dos (La aplicacion solo usa los roles "Automovilista" y "Vendedor"), procede a crearlos con sus respectivos permisos (que tambien los almacena en la base de datos). Estos luegos se utilizaran para la creacion del vendedor (que tendra el rol de "Vendedor") y el registro de usuarios (que tendran el rol de "Automovilista").
