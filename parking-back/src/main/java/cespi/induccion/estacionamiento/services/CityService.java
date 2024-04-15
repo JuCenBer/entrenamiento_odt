@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 import cespi.induccion.estacionamiento.models.City;
 import cespi.induccion.estacionamiento.models.Holiday;
+import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.repositories.CityRepository;
 import cespi.induccion.estacionamiento.repositories.HolidayRepository;
 

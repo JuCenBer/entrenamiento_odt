@@ -88,13 +88,4 @@ public class AuthRestController {
 		hasPermission = authorizationService.hasPermission(user, permission);
 		return new ResponseEntity<Boolean>(hasPermission, HttpStatus.OK);
 	}
-	
-//	public ResponseEntity<?> logout(@RequestBody LoginDTO loginDTO){
-//		Automovilista automovilista = null;
-//		try {
-//		} catch (Exception e) {
-//			
-//		}
-//	}
-
 }

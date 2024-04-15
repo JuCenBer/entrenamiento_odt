@@ -175,7 +175,7 @@ public class AutomovilistaService {
 	
 	@Scheduled(cron = "0 0 20 * * MON-FRI")
 	public void endAllUsersParking() {
-		List<User> users = this.userRepository.findAll();
+		List<User> users = this.findAllAutomovilistas();
 		for (User user: users) {
 			if(this.isParked(user).isParked()) {				
 				try {
@@ -186,5 +186,4 @@ public class AutomovilistaService {
 			}
 		}
 	}
-	
 }

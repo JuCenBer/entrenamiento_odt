@@ -78,8 +78,8 @@ public class AutomovilistaRestController {
 			user = automovilistaService.findByCellphone(username);
 			vehiculos = automovilistaService.getVehicles(user);
 		} catch (Exception e) {
-			ErrorMessage error = new ErrorMessage(404, "El usuario no existe");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+			ErrorMessage error = new ErrorMessage(401, "El usuario no existe");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<List<String>>(vehiculos, HttpStatus.OK);
 	}
@@ -94,10 +94,9 @@ public class AutomovilistaRestController {
 		}
 		try {
 			user = automovilistaService.findByCellphone(username);
-			System.out.println("automovilista encontrado");
 		} catch (Exception e) {
-			ErrorMessage error = new ErrorMessage(404, "Credenciales invalidas");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.NOT_FOUND);
+			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
 		}
 		//El id pertenece al automovilista que quiere iniciar el estacionamiento, y la patente es del vehiculo que se quiere estacionar		
 		try {
@@ -116,9 +115,9 @@ public class AutomovilistaRestController {
 		String username = this.authorizationService.getUser(token);
 		try {
 			user = automovilistaService.findByCellphone(username);
-			System.out.println("automovilista encontrado");
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
 		}
 		try {
 			UserDTO dto = automovilistaService.endParking(user);
@@ -138,9 +137,9 @@ public class AutomovilistaRestController {
 		List<String> vehicles = null;
 		try {
 			user = automovilistaService.findByCellphone(username);
-			System.out.println("automovilista encontrado");
 		} catch (Exception e) {
-			e.printStackTrace();
+			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
 		}
 		if (vehiculoService.checkLicensePlateFormatRegex(vehiculoDTO.getLicensePlate())) {
 			try {
@@ -163,8 +162,8 @@ public class AutomovilistaRestController {
 		try {
 			user = automovilistaService.findByCellphone(username);
 		} catch (Exception e) {
-			ErrorMessage error = new ErrorMessage(400, "Credenciales invalidas");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
+			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
 		}
 		ParkingDTO parkingDTO = this.automovilistaService.isParked(user);
 		return new ResponseEntity<ParkingDTO>(parkingDTO, HttpStatus.OK);
@@ -179,8 +178,8 @@ public class AutomovilistaRestController {
 		try {
 			user = automovilistaService.findByCellphone(username);
 		} catch (Exception e) {
-			ErrorMessage error = new ErrorMessage(400, "Credenciales invalidas");
-			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
+			ErrorMessage error = new ErrorMessage(401, "Credenciales invalidas");
+			return new ResponseEntity<ErrorMessage>(error, HttpStatus.UNAUTHORIZED);
 		}
 		transacciones = automovilistaService.findTransactions(user);
 		return new ResponseEntity<List<TransactionDTO>>(transacciones, HttpStatus.OK);

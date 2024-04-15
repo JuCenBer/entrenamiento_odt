@@ -18,7 +18,7 @@ export const sellerGuard: CanActivateFn = (route, state) => {
   let user = inject(UserService)
   let permissions = JSON.parse(localStorage.getItem("permissions")!)
   if(!user.hasPermission("Sell", permissions)){
-      router.navigate(["home"])
+      router.navigate([router.url]);
       return false;
     }
     else return true;
@@ -28,7 +28,7 @@ export const automovilistaGuard: CanActivateFn = (route, state) => {
   let user = inject(UserService)
   let permissions = JSON.parse(localStorage.getItem("permissions")!)
   if(!user.hasPermission("Park", permissions)){
-    router.navigate(["sell"])
+    router.navigate([router.url]);
     return false;
     }
     else return true;
