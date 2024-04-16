@@ -32,11 +32,9 @@ public class JWTAuthenticationFilter implements Filter{
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
-		System.out.println(req.getRequestURI());
 		if("/parking-back/auth/login".equals(req.getRequestURI()) 
 				|| "/parking-back/auth/register".equals(req.getRequestURI()) 
 				|| HttpMethod.OPTIONS.matches(req.getMethod())) {
-			System.out.println("Holaaaa");
 			chain.doFilter(request, response);
 			return ;
 		}
@@ -48,10 +46,9 @@ public class JWTAuthenticationFilter implements Filter{
 //	        }
 //	    }
 		String token = req.getHeader(HttpHeaders.AUTHORIZATION);
-		System.out.println(token);
+//		System.out.println(token);
 		if ((token == null) || !AuthorizationService.validateToken(token)) {
 			HttpServletResponse res = (HttpServletResponse) response;
-			System.out.println("ES NULL");
             res.setStatus(HttpStatus.FORBIDDEN.value());
             res.setHeader("Access-Control-Allow-Origin", "*");
 			return;
