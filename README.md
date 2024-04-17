@@ -33,7 +33,7 @@ El cliente esta construido usando Angular 17.
 ## Levantar el Server
 Para poder hacer uso del frontend, es necesario que el server este levantado
 
-Importar el proyecto dentro del folder __parking_back__ en el IDE (IDEA, Eclipse, etc) y levantar el proyecto usando Tomcat o Jetty. 
+Importar `parking_back.war` en el IDE (IDEA, Eclipse, etc) y levantar el proyecto usando Tomcat. 
 > Desde el frontend se asume que el server esta escuchando en http://localhost:8080/parking-back
 
 ## Base de datos
