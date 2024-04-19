@@ -1,25 +1,19 @@
 package cespi.induccion.estacionamiento.services;
 
-import java.io.File;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
-import org.springframework.util.SystemPropertyUtils;
 
 import com.opencsv.CSVReader;
 
-import cespi.induccion.estacionamiento.DTO.UserDTO;
 import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.repositories.BankAccountRepository;
 import cespi.induccion.estacionamiento.repositories.UserRepository;

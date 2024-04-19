@@ -6,8 +6,8 @@
         <div>
             <form [formGroup]="vehicleForm" (ngSubmit)="addVehicle()" class="row g-3">
                 <div class="col-auto">
-                    <label for="licensePlate" class="visually-hidden">Password</label>
-                    <input class="form-control" id="licensePlate" formControlName="licensePlate" placeholder="Patente">
+                    <label for="licensePlate" class="visually-hidden">Patente</label>
+                    <input class="form-control" id="licensePlate" formControlName="licensePlate" placeholder="Patente" i18n-placeholder>
                 </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-success mb-3" [disabled]="!(vehicleForm.valid && vehicleForm.dirty && vehicleForm.value.licensePlate!.length>=6)">Agregar Vehiculo</button>

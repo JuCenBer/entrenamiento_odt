@@ -16,9 +16,9 @@
                 <h5>{{transaction.operation}}</h5>
             </div>
             <div class="card-body">
-                <h4 *ngIf="transaction.type == 'consumption'" class="card-title text-danger">-${{transaction.amount}}</h4>
-                <h4 *ngIf="transaction.type == 'recharge'" class="card-title text-success">+${{transaction.amount}}</h4>
-                <h5 class="card-text"><b>Saldo resultante:</b> ${{transaction.newBalance}}</h5>
+                <h4 *ngIf="transaction.type == 'consumption'" class="card-title text-danger" i18n>-${{transaction.amount}}</h4>
+                <h4 *ngIf="transaction.type == 'recharge'" class="card-title text-success" i18n>+${{transaction.amount}}</h4>
+                <h5 class="card-text" i18n><b>Saldo resultante:</b> ${{transaction.newBalance}}</h5>
                 <p class="card-text"> <b>Tipo:</b> {{ transaction.type }}</p>
                 <p class="card-text"> <b>Fecha:</b> {{ transaction.date | date: 'd/M/yy, HH:mm' : 'UTC'}}</p>
             </div>

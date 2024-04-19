@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cespi</groupId>
-	<artifactId>induccion</artifactId>
+	<artifactId>parking-back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>estacionamiento</name>

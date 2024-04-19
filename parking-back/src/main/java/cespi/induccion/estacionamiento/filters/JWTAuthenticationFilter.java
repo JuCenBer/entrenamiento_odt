@@ -38,15 +38,15 @@ public class JWTAuthenticationFilter implements Filter{
 			chain.doFilter(request, response);
 			return ;
 		}
-//		Enumeration<String> headers = req.getHeaderNames();
-//		if (headers != null) {
-//	        while (headers.hasMoreElements()) {
-//	            String name = headers.nextElement();
-//	            System.out.println("Header: " + name + " value:" + req.getHeader(name));
-//	        }
-//	    }
+		Enumeration<String> headers = req.getHeaderNames();
+		if (headers != null) {
+	        while (headers.hasMoreElements()) {
+	            String name = headers.nextElement();
+	            System.out.println("Header: " + name + " value:" + req.getHeader(name));
+	        }
+	    }
 		String token = req.getHeader(HttpHeaders.AUTHORIZATION);
-//		System.out.println(token);
+		System.out.println(token);
 		if ((token == null) || !AuthorizationService.validateToken(token)) {
 			HttpServletResponse res = (HttpServletResponse) response;
             res.setStatus(HttpStatus.FORBIDDEN.value());
