@@ -11,6 +11,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,9 @@ public class VehiculoService {
 //	@Autowired
 //	VehiculoRepository vehiculoRepository;
 	private String localPlateFormatRegex;
+	private int localPlateFormatLength;
 	private String mercosurPlateFormatRegex;
+	private int mercosurPlateFormatLength;
 	
 	
 	public VehiculoService() {
@@ -46,6 +49,8 @@ public class VehiculoService {
         }
 		this.localPlateFormatRegex = this.obtenerRegexDesdeFormato(localPlateFormat);
 		this.mercosurPlateFormatRegex = this.obtenerRegexDesdeFormato(mercosurPlateFormat);
+		this.localPlateFormatLength = localPlateFormat.length();
+		this.mercosurPlateFormatLength = mercosurPlateFormat.length();
 	}
 	
 	
@@ -54,29 +59,19 @@ public class VehiculoService {
 	}
 	
 	private boolean isLocalLicensePlateFormatRegex(String licensePlate) {
-		//Chequea por el formato de patente 'AAA999'
-		if(licensePlate.length() == 6) {			
-			Pattern pattern = Pattern.compile(this.localPlateFormatRegex);
-			Matcher matcher = pattern.matcher(licensePlate);
-			boolean matchFound = matcher.find();
-			if(matchFound) {
-				System.out.println("Formato local valido");
-				return true;
-			}
+		//Chequea por el formato de patente 'AAA999'			
+		if(this.checkFormat(licensePlate, this.localPlateFormatRegex) && (licensePlate.length() == this.localPlateFormatLength)) {
+			System.out.println("Formato local valido");
+			return true;
 		}
 		return false;
 	}
 	
 	private boolean isMercosurLicensePlateFormatRegex(String licensePlate) {
 		//Chequea por el formato de patente 'AA000AA'
-		if(licensePlate.length() == 7) {			
-			Pattern pattern = Pattern.compile(this.mercosurPlateFormatRegex);
-			Matcher matcher = pattern.matcher(licensePlate);
-			boolean matchFound = matcher.find();
-			if(matchFound) {
-				System.out.println("Formato Mercosur valido");
-				return true;
-			}
+		if(this.checkFormat(licensePlate, this.mercosurPlateFormatRegex) && (licensePlate.length() == this.mercosurPlateFormatLength)) {
+			System.out.println("Formato Mercosur valido");
+			return true;
 		}
 	    return false;
 	}
@@ -84,5 +79,12 @@ public class VehiculoService {
 	private String obtenerRegexDesdeFormato(String formato) {
         return formato.replaceAll("L", "[A-Za-z]") // Letras (mayusculas o minusculas)
                 .replaceAll("N", "[0-9]");    // Numeros
+	}
+	
+	private boolean checkFormat(String licensePlate, String regexFormat) {
+		Pattern pattern = Pattern.compile(regexFormat);
+		Matcher matcher = pattern.matcher(licensePlate);
+		boolean matchFound = matcher.find();
+		return matchFound;
 	}
 }

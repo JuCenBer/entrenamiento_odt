@@ -4,6 +4,15 @@
   "newProjectRoot": "projects",
   "projects": {
     "parking-front": {
+      "i18n":{
+        "sourceLocale": "es-AR",
+        "locales": {
+          "es-PY":{
+            "translation": "src/locale/messages.py.xlf",
+            "baseHref": "es-PY/"
+          }
+        }
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -28,9 +37,13 @@
               "src/custom-theme.scss",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "localize": true
           },
           "configurations": {
+            "es-PY": {
+              "localize": ["es-PY"]
+            },
             "production": {
               "budgets": [
                 {
@@ -57,6 +70,9 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
+            "es-PY": {
+              "buildTarget": "parking-front:build:development,es-PY"
+            },
             "production": {
               "buildTarget": "parking-front:build:production"
             },

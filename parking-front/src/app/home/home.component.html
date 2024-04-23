@@ -5,8 +5,8 @@
         </div>
         <div class="row gx-5">
             <h5 class="m-3 col">Celular: {{ this.cellphone }}</h5>
-            <h5 *ngIf="this.balance > 0" class="text-success col m-3" i18n>Saldo: ${{ this.balance }}</h5>
-            <h5 *ngIf="this.balance <= 0" class="text-danger col m-3" i18n>Saldo: ${{ this.balance }}</h5>
+            <h5 *ngIf="this.balance > 0" class="text-success col m-3">Saldo: {{this.currency}}{{ this.balance | number: format }}</h5>
+            <h5 *ngIf="this.balance <= 0" class="text-danger col m-3">Saldo: {{this.currency}}{{ this.balance | number: format }}</h5>
         </div>
         <form [formGroup]="parkingForm" (ngSubmit)="startParking()" class="row gy-2 gx-3 align-items-center m-1">
             <div *ngIf="!parkingInfo.parked" class="row">

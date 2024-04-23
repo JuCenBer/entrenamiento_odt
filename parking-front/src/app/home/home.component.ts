@@ -1,14 +1,15 @@
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { UserService } from '../services/user-service/user.service';
 import { ErrorMessage } from '../models/error-message';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Parking } from '../models/parking';
+import { currencySymbol, numberFormat } from '../models/instanceParameters';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgFor, NgIf, ReactiveFormsModule],
+  imports: [NgFor, NgIf, ReactiveFormsModule, CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -28,6 +29,8 @@ export class HomeComponent {
   cellphone: string = localStorage.getItem("username")!;
   balance!: number;
   failed: boolean = false
+  currency = currencySymbol;
+  format = numberFormat;
   
   constructor(private userService: UserService){
   }
