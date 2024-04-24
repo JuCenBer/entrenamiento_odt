@@ -2,6 +2,7 @@ import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
+import { ConfigService } from './services/config-service/config.service';
 
 @Component({
   selector: 'app-root',

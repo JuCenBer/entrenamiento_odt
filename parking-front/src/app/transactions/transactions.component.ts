@@ -8,7 +8,7 @@ import { AllTransactionsStrategy } from '../classes/all-transactions-strategy';
 import { NgFor, NgIf, DatePipe } from '@angular/common';
 import { ConsumptionOnlyStrategy } from '../classes/consumption-only-strategy';
 import { RechargeOnlyStrategy } from '../classes/recharge-only-strategy';
-import { currencySymbol, numberFormat } from '../models/instanceParameters';
+import { ConfigService } from '../services/config-service/config.service';
 
 
 @Component({
@@ -27,10 +27,17 @@ export class TransactionsComponent{
     message:"",
     status: 0
   }
-  currency = currencySymbol
-  format = numberFormat
+  currency!: String;
+  format!: string;
 
-  constructor(private userService: UserService){
+  constructor(private userService: UserService, private config: ConfigService){
+    this.config.loadConfig().subscribe({
+      next: (config)=>{
+        this.currency = config.currencySymbol ?? this.config.getCurrencySymbol();
+        let decimalPlaces = config.decimalPlaces;
+        this.format = `1.${decimalPlaces}-${decimalPlaces}`;
+      }
+    })
   }
   
   ngOnInit(){

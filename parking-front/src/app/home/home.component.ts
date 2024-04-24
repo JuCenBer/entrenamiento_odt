@@ -4,7 +4,8 @@ import { UserService } from '../services/user-service/user.service';
 import { ErrorMessage } from '../models/error-message';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Parking } from '../models/parking';
-import { currencySymbol, numberFormat } from '../models/instanceParameters';
+import { ConfigService } from '../services/config-service/config.service';
+
 
 @Component({
   selector: 'app-home',
@@ -29,10 +30,17 @@ export class HomeComponent {
   cellphone: string = localStorage.getItem("username")!;
   balance!: number;
   failed: boolean = false
-  currency = currencySymbol;
-  format = numberFormat;
+  currency!: String;
+  format!: string;
   
-  constructor(private userService: UserService){
+  constructor(private userService: UserService, private config: ConfigService){
+    this.config.loadConfig().subscribe({
+      next: (config)=>{
+        this.currency = config.currencySymbol ?? this.config.getCurrencySymbol();
+        let decimalPlaces = config.decimalPlaces;
+        this.format = `1.${decimalPlaces}-${decimalPlaces}`;
+      }
+    })
   }
 
   ngOnInit():void{
