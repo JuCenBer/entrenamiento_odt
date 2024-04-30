@@ -48,5 +48,8 @@
         <div *ngIf="this.failed" class="alert alert-danger">
             {{ errorMsg.message }}
         </div>
+        <div *ngIf="this.succeded && !this.parkingInfo.parked" class="alert alert-success">
+            El costo del estacionamiento fue de {{this.currency}}{{this.oldBalance-this.balance}}.
+        </div>
     </div>
 </div>

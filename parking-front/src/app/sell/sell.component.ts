@@ -50,6 +50,7 @@ export class SellComponent {
           console.log(JSON.parse(data))
           this.status.success = true;
           this.status.failed = false;
+          this.sellForm.get("amount")?.setValue(null)
         }
       });
     }

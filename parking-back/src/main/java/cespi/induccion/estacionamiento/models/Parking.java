@@ -50,13 +50,19 @@ public class Parking {
         LocalDateTime endHour = LocalDateTime.now();
         long minutosTranscurridos = ChronoUnit.MINUTES.between(this.startHour, endHour);
         City city = user.getCity();
-        double periods = 1; //Por defecto se cuenta el primer periodo para el cobro.
-        double amountPeriods = Math.ceil(((minutosTranscurridos) / city.getMinutesPerPeriod()));
-        if (periods < amountPeriods) {
-        	periods = amountPeriods; // en caso de haber transcurrido más de un periodo, se le asigna esa cantidad.
+        double amount = 0;
+        int periods = 1; //Por defecto se cuenta el primer periodo para el cobro.
+        amount += city.getPrice();
+        if(minutosTranscurridos >= city.getFirstPeriodLength()) {
+        	minutosTranscurridos -= city.getFirstPeriodLength(); 
+        	double ratio = ( ((double)city.getSecondPeriodLength()) / ((double)city.getFirstPeriodLength()) ); //El precio de los periodos que siguen se calcula en base a la proporcion del precio del periodo inicial
+        	periods = 1; //Por defecto se cuenta el primer periodo de los que le siguen al inicial.
+        	int amountPeriods = (int) Math.ceil(((minutosTranscurridos) / city.getSecondPeriodLength()));
+        	if(periods <= amountPeriods) periods = amountPeriods; //De haber pasado mas de un periodo de los que le siguen al inicial, se le asigna esa cantidad.
+        	System.out.println("Ratio:" + ratio);
+        	amount += periods * (city.getPrice()*ratio);           	
         }
-		double amount = periods * city.getPrice();
 		int intAmount = (int)(amount*100.0);
-		return amount = ((double)intAmount)/100; //Esto es para asegurar que el precio sea solo de dos cifras.
+		return amount = ((double)intAmount)/100; //Esto es para asegurar que el los deciamales del precio sea solo de dos cifras (a lo sumo).
 	}
 }

@@ -29,7 +29,9 @@ export class HomeComponent {
 
   cellphone: string = localStorage.getItem("username")!;
   balance!: number;
+  oldBalance:number = 0;
   failed: boolean = false
+  succeded: boolean = false
   currency!: String;
   format!: string;
   
@@ -52,7 +54,7 @@ export class HomeComponent {
     vehicle: new FormControl('', [Validators.required,Validators.nullValidator]),
   });
 
-  getUserInfo():void{
+  getUserInfo(): void{
     this.userService.getUserInformation().subscribe({
       error: (e) =>{
         this.errorMsg = e.error;
@@ -85,6 +87,7 @@ export class HomeComponent {
       error:(e) =>{
         this.errorMsg = e.error;
         this.failed = true
+        this.succeded = false
       },
       complete: () =>{
         this.errorMsg.message = "";
@@ -98,10 +101,16 @@ export class HomeComponent {
 
   endParking():void{
     this.userService.endParking().subscribe({
+      
       error: (e)=>{
         this.errorMsg = e.error
+        this.failed = true
+        this.succeded = false
       },
       next: (data)=>{
+        this.oldBalance = this.balance
+        this.succeded = true
+        this.failed = false
         localStorage.setItem("balance", data.balance);
         this.parkingInfo.parked = false;
         this.parkingInfo.parkedCarLicensePlate = "";
@@ -109,7 +118,7 @@ export class HomeComponent {
         this.parkingForm.get("vehicle")?.enable()
         this.getUserInfo();
       }
-    })
+    });
   }
-
+  
 }

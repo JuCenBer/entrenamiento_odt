@@ -16,6 +16,7 @@ import cespi.induccion.estacionamiento.models.SellerPermission;
 import cespi.induccion.estacionamiento.models.VehiclePermission;
 import cespi.induccion.estacionamiento.repositories.PermissionRepository;
 import cespi.induccion.estacionamiento.repositories.RoleRepository;
+import jakarta.annotation.PostConstruct;
 
 @Service
 @Transactional
@@ -26,9 +27,12 @@ public class RoleService {
 	@Autowired
 	private PermissionRepository permissionRepository;
 	
-	@EventListener(ApplicationReadyEvent.class)
+	public RoleService() {
+	}
+	
+	@PostConstruct
 	public void checkExistingRoles() {
-	    List<Role> roles = roleRepository.findAll();
+	    List<Role> roles = this.roleRepository.findAll();
 	    if (roles.size() != 2) {
 	    	System.out.println("Creando roles...");
 	    	roleRepository.deleteAll();

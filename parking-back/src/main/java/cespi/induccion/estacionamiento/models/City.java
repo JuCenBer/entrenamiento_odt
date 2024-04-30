@@ -14,19 +14,22 @@ public class City {
 	private int startHour;
 	private int endHour;
 	private double price;
-	private int minutesPerPeriod;
+	private int firstPeriodLength; //periodo en minutos
+	private int secondPeriodLength; //periodo en minutos
 	
+	
+	//constructor
 	public City() {
 		
 	}
 	
-	//constructor
-	public City(String city, int startHour, int endHour, double price) {
+	public City(String city, int startHour, int endHour, double price, int firstPeriodLength, int secondPeriodLength) {
 		this.city = city;
 		this.startHour = startHour;
 		this.endHour = endHour;
 		this.price = price;
-		this.minutesPerPeriod = 15;
+		this.firstPeriodLength = firstPeriodLength;
+		this.secondPeriodLength = secondPeriodLength;
 	}
 	
 	public boolean isBusinessHour(int hour) {
@@ -66,12 +69,20 @@ public class City {
 		this.price = price;
 	}
 
-	public int getMinutesPerPeriod() {
-		return minutesPerPeriod;
+	public int getFirstPeriodLength() {
+		return firstPeriodLength;
 	}
 
-	public void setMinutesPerPeriod(int minutesPerPeriod) {
-		this.minutesPerPeriod = minutesPerPeriod;
+	public void setFirstPeriodLength(int firstPeriodLength) {
+		this.firstPeriodLength = firstPeriodLength;
 	}
-	
+
+	public int getSecondPeriodLength() {
+		return secondPeriodLength;
+	}
+
+	public void setSecondPeriodLength(int secondPeriodLength) {
+		this.secondPeriodLength = secondPeriodLength;
+	}
+
 }

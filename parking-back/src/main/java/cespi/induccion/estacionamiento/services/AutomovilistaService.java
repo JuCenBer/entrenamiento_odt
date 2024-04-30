@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import cespi.induccion.estacionamiento.models.Parking;
 import cespi.induccion.estacionamiento.models.Role;
 import cespi.induccion.estacionamiento.models.Transaction;
 import cespi.induccion.estacionamiento.repositories.UserRepository;
+import cespi.induccion.estacionamiento.repositories.CityRepository;
 import cespi.induccion.estacionamiento.repositories.ParkingRepository;
 import cespi.induccion.estacionamiento.repositories.RoleRepository;
 
@@ -37,9 +39,14 @@ public class AutomovilistaService {
 	@Autowired
 	private BankAccountService bankAccountService;
 	@Autowired
-	private CityService cityService;
-	@Autowired
 	private RoleRepository roleRepository;
+	
+	private CityService cityService;
+	
+	@Autowired
+	public void setCityService(@Lazy CityService cityService) {
+		this.cityService = cityService;
+	}
 	
 	public UserDTO login(LoginDTO loginDTO) throws Exception{
 		try {			

@@ -2,8 +2,10 @@ package cespi.induccion.estacionamiento.controllers;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -27,6 +29,7 @@ import cespi.induccion.estacionamiento.models.User;
 import cespi.induccion.estacionamiento.services.AuthorizationService;
 import cespi.induccion.estacionamiento.services.AutomovilistaService;
 import cespi.induccion.estacionamiento.services.CityService;
+import cespi.induccion.estacionamiento.services.ImportService;
 import cespi.induccion.estacionamiento.services.VehiculoService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -43,6 +46,10 @@ public class AutomovilistaRestController {
 	private CityService cityService;
 	@Autowired
 	private AuthorizationService authorizationService;
+	@Autowired
+	private MessageSource messageSource;
+	@Autowired
+	private ImportService importService;
 	
 	@GetMapping(value="/all") //para usar de prueba
 	public ResponseEntity<List<User>> listAllUsers() {
@@ -149,7 +156,8 @@ public class AutomovilistaRestController {
 				return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 			}
 		} else {
-			ErrorMessage error = new ErrorMessage(400, "La patente del vehiculo no cumple con ninguno de los formatos estándar.");
+			String plate = messageSource.getMessage("plate.message", null, new Locale(this.importService.getRegion()));
+			ErrorMessage error = new ErrorMessage(400, "La "+ plate +" del vehiculo no cumple con ninguno de los formatos estándar.");
 			return new ResponseEntity<ErrorMessage>(error, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<List<String>>(vehicles, HttpStatus.OK);
