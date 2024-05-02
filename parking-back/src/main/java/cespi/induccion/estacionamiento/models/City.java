@@ -11,8 +11,8 @@ public class City {
 	@Id @GeneratedValue
 	private Long id;
 	private String city;
-	private int startHour;
-	private int endHour;
+	private int startTime;
+	private int endTime;
 	private double price;
 	private int firstPeriodLength; //periodo en minutos
 	private int secondPeriodLength; //periodo en minutos
@@ -23,17 +23,17 @@ public class City {
 		
 	}
 	
-	public City(String city, int startHour, int endHour, double price, int firstPeriodLength, int secondPeriodLength) {
+	public City(String city, int startTime, int endTime, double price, int firstPeriodLength, int secondPeriodLength) {
 		this.city = city;
-		this.startHour = startHour;
-		this.endHour = endHour;
+		this.startTime= startTime;
+		this.endTime = endTime;
 		this.price = price;
 		this.firstPeriodLength = firstPeriodLength;
 		this.secondPeriodLength = secondPeriodLength;
 	}
 	
 	public boolean isBusinessHour(int hour) {
-		if(hour > this.startHour && hour < this.endHour) {
+		if(hour > this.startTime && hour < this.endTime) {
 			System.out.println("Es horario habil");
 			return true;
 		}
@@ -50,18 +50,23 @@ public class City {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public int getStartHour() {
-		return startHour;
+	
+	public int getStartTime() {
+		return startTime;
 	}
-	public void setStartHour(int startHour) {
-		this.startHour = startHour;
+
+	public void setStartTime(int startTime) {
+		this.startTime = startTime;
 	}
-	public int getEndHour() {
-		return endHour;
+
+	public int getEndTime() {
+		return endTime;
 	}
-	public void setEndHour(int endHour) {
-		this.endHour = endHour;
+
+	public void setEndTime(int endTime) {
+		this.endTime = endTime;
 	}
+
 	public double getPrice() {
 		return price;
 	}

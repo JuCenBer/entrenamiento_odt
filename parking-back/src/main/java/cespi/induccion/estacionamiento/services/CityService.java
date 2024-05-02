@@ -40,14 +40,14 @@ public class CityService {
 	public void checkExistingCity() {
 		String regionName = this.importService.getRegionName();
 		double price = this.importService.getPrice();
-		int startHour = this.importService.getStartHour();
-		int endHour = this.importService.getEndHour();
-		int firstPeriodLength = this.importService.getFirstPeriodLength();
-		int secondPeriodLength = this.importService.getSecondPeriodLength();
+		int startHour = this.importService.getStartTime();
+		int endHour = this.importService.getEndTime();
+		int basePeriodFraction = this.importService.getBasePeriodFraction();
+		int posteriorPeriodFraction = this.importService.getPosteriorPeriodFraction();
 	
 		if(cityRepository.findAll().size() != 1) {
 			cityRepository.deleteAll();
-			City city = new City(regionName, startHour, endHour, price, firstPeriodLength, secondPeriodLength);
+			City city = new City(regionName, startHour, endHour, price, basePeriodFraction, posteriorPeriodFraction);
 			cityRepository.save(city);
 		}
 	}

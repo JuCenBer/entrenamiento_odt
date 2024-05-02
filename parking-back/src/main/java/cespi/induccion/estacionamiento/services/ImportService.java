@@ -44,10 +44,10 @@ public class ImportService {
 	private String mercosurPlateFormat;
 	private String regionName;
 	private double price;
-	private int startHour;
-	private int endHour;
-	private int firstPeriodLength;
-	private int secondPeriodLength;
+	private int startTime;
+	private int endTime;
+	private int basePeriodFraction;
+	private int posteriorPeriodFraction;
 	
 	public ImportService() {
 		//Al instanciar la clase, inmediatamente lee los parametros de instancia.
@@ -70,10 +70,10 @@ public class ImportService {
             this.mercosurPlateFormat = properties.getProperty("mercosurPlateFormat");
             this.regionName = properties.getProperty("regionName");
             this.price = Double.valueOf(properties.getProperty("price"));
-            this.startHour = Integer.valueOf(properties.getProperty("startHour"));
-            this.endHour = Integer.valueOf(properties.getProperty("endHour"));
-            this.firstPeriodLength = Integer.valueOf(properties.getProperty("firstPeriodLength"));
-            this.secondPeriodLength = Integer.valueOf(properties.getProperty("secondPeriodLength"));
+            this.startTime = Integer.valueOf(properties.getProperty("startTime"));
+            this.endTime = Integer.valueOf(properties.getProperty("endTime"));
+            this.basePeriodFraction = Integer.valueOf(properties.getProperty("basePeriodFraction"));
+            this.posteriorPeriodFraction = Integer.valueOf(properties.getProperty("posteriorPeriodFraction"));
         } catch (IOException ex) {
             System.err.println("Error al cargar el archivo de propiedades: " + ex.getMessage());
             ex.printStackTrace();
@@ -158,20 +158,23 @@ public class ImportService {
 		return price;
 	}
 
-	public int getStartHour() {
-		return startHour;
+	public int getStartTime() {
+		return startTime;
 	}
 
-	public int getEndHour() {
-		return endHour;
+	public int getEndTime() {
+		return endTime;
 	}
 
-	public int getFirstPeriodLength() {
-		return firstPeriodLength;
+	public int getBasePeriodFraction() {
+		return basePeriodFraction;
 	}
 
-	public int getSecondPeriodLength() {
-		return secondPeriodLength;
+
+	public int getPosteriorPeriodFraction() {
+		return posteriorPeriodFraction;
 	}
+
+
 	
 }
